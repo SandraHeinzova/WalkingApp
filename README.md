@@ -26,10 +26,10 @@ Please feel free to contact me for any tips!
 </ul>
 
 <p align="center">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/848ba28c-388b-4410-aade-41822d21e9f4" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/c87f7e54-bb66-4f18-abbd-00e45ad34c19" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/4bf36fe7-da67-47d2-8b61-054e641a84ee" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/19aeb8e6-4a32-4b69-b3e7-dfbc1642dbbe" width="125" height="250">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/e5bd93f3-ec05-45df-bb45-e5f2a10ff446" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/d972f8b7-bdc6-40e7-920e-25ccef357c5f" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/b8009a28-6c43-4a72-b740-3581fbfeed29" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/7d1edfbf-576c-4faf-ad9e-7b07f15185eb" width="125" height="250">
 </p>
 
 <ul>
@@ -39,8 +39,8 @@ Please feel free to contact me for any tips!
 </ul>
 
 <p align="center">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/968739ab-6c4c-42c4-b3c4-260038eca959" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/381f54e1-59e3-4e56-90cb-a2ce5a02fa7e" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/798d1867-bfa9-4828-8d61-36f44cd1ac07" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/3853ca12-27cc-4e33-ad03-ae46711d3a86" width="125" height="250" hspace="10">
 </p>
 
 <ul>
@@ -49,10 +49,11 @@ Please feel free to contact me for any tips!
 </ul>
 
 <p align="center">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/ec14b446-a415-4d73-b257-2bd51d60e48b" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/d15a0a31-801c-4fbb-851f-48bc8f34ab4f" width="125" height="250" hspace="10">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/a3a15230-579c-4fc5-a006-6b7c69b05a78" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/8f401dd4-3ea0-4038-aa51-ce14871d4b00" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/733836a2-1ad0-426b-a0b9-c0161d6a1161" width="125" height="250" hspace="10">
+<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/4196e4a6-cada-4e95-8c87-0f88b4d86269" width="125" height="250" hspace="10">
 </p>
+
 
 <h2 align="center">Requirements</h2>
 <ul>
