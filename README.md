@@ -13,7 +13,7 @@ Please feel free to contact me for any tips!
   <li>Get your copy of the main.py and walking_data.xlsx files and make sure, you have all required libraries.</li>
   <li>Open the main.py on your PyCharm etc. and hit run.</li>
   <li>Flet enables to develop mobile apps as well. If you want to test this app on your mobile phone 
-      just follow [Flet Guide](https://flet.dev/docs/guides/python/testing-on-android). For now available for Android.  </li>
+      just follow <a href="https://flet.dev/docs/guides/python/testing-on-android">Flet Guide</a>. For now available for Android.  </li>
 </ul>
 
 <h2 align="center">About the App </h2>
@@ -21,7 +21,7 @@ Please feel free to contact me for any tips!
 <ul>
   <li>This App starts with a loading page. </li>
   <li>After that the user is redirected to the main page of the App. Here are some buttons - to choose the date for which you want to save kilometers,   
-      the one which opens the [map](https://mapy.cz/) - (so the user can look for some tourist trail for next walk), exit button and the most important   
+      the one which opens a <a href="https://mapy.cz">map</a> - (so the user can look for some tourist trail for next walk), exit button and the most important   
       the button to save new records. </li>
 </ul>
 
