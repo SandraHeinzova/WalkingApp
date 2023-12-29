@@ -1,5 +1,4 @@
 import openpyxl
-from time import sleep
 from openpyxl.styles import Alignment, PatternFill, Border, Side
 import flet as ft
 from datetime import datetime, timedelta
@@ -279,14 +278,6 @@ def main(page: ft.Page):
         on_click=open_google_maps,
     )
 
-    progress_ring = ft.ProgressRing(width=50,
-                                    height=50,
-                                    stroke_width=10,
-                                    value=0,
-                                    color="white",
-                                    opacity=0.5
-                                    )
-
 # GUI OF THE APP
 
     def views(route):
@@ -476,45 +467,9 @@ def main(page: ft.Page):
         top_view = page.views[-1]
         page.go(top_view.route)
 
-#  FIRST LOADING PAGE
-
-    background = ft.Stack(
-        [
-            ft.Image(
-                src="https://picsum.photos/id/651/400/800",
-                width=page.window_width,
-                height=page.window_height,
-                fit=ft.ImageFit.FILL
-            ),
-            ft.Container(content=progress_ring,
-                         alignment=ft.alignment.center,
-                         ),
-            ft.Container(ft.Text(
-                "WalkingApp",
-                color="white",
-                size=40,
-                weight=ft.FontWeight.BOLD,
-                opacity=0.5,
-            ),
-                alignment=ft.alignment.Alignment(0, -0.5)
-            ),
-        ],
-        width=page.window_width,
-        height=page.window_height)
-
-    page.add(background)
-
-# LOADING FUNCTION
-
-    for i in range(101):
-        progress_ring.value = i * 0.01
-        sleep(0.1)
-        page.update()
-
-    if progress_ring.value == 1:
-        page.on_route_change = views
-        page.on_view_pop = view_pop
-        page.go(page.route)
+    page.on_route_change = views
+    page.on_view_pop = view_pop
+    page.go(page.route)
 
 
 # START OF THE APP
