@@ -11,14 +11,16 @@ def main(page: ft.Page):
     page.window_height = 850
     page.bgcolor = ft.colors.BLUE_100
     page.window_resizable = False
+    page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
 
-#  FUNCTION BODY OF THE APP
+    #  FUNCTION BODY OF THE APP
 
     def window_event(e):
-        page.dialog = confirm_dialog
-        confirm_dialog.open = True
-        page.update()
+        if e.data == "close" or e.name == "click":
+            page.dialog = confirm_dialog
+            confirm_dialog.open = True
+            page.update()
 
     page.window_prevent_close = True
     page.on_window_event = window_event
@@ -181,7 +183,7 @@ def main(page: ft.Page):
             wb.close()
             page.update()
 
-# CONTROLS OF THE APP - DIALOGUES, BUTTONS, TEXTS
+    # CONTROLS OF THE APP - DIALOGUES, BUTTONS, TEXTS
 
     welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                           color=ft.colors.INDIGO,
@@ -278,7 +280,7 @@ def main(page: ft.Page):
         on_click=open_google_maps,
     )
 
-# GUI OF THE APP
+    # GUI OF THE APP
 
     def views(route):
         page.views.clear()
