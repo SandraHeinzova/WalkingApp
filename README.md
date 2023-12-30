@@ -19,14 +19,12 @@ Please feel free to contact me for any tips!
 <h2 align="center">About the App </h2>
 
 <ul>
-  <li>This App starts with a loading page. </li>
-  <li>After that the user is redirected to the main page of the App. Here are some buttons - to choose the date for which you want to save kilometers,   
+  <li>The main page of the App has some buttons - to choose the date for which you want to save kilometers,   
       the one which opens a <a href="https://mapy.cz">map</a> - (so the user can look for some tourist trail for next walk), exit button and the most important   
       the button to save new records. </li>
 </ul>
 
 <p align="center">
-<img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/e5bd93f3-ec05-45df-bb45-e5f2a10ff446" width="125" height="250" hspace="10">
 <img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/d972f8b7-bdc6-40e7-920e-25ccef357c5f" width="125" height="250" hspace="10">
 <img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/b8009a28-6c43-4a72-b740-3581fbfeed29" width="125" height="250" hspace="10">
 <img src="https://github.com/SandraHeinzova/WalkingApp/assets/110200002/7d1edfbf-576c-4faf-ad9e-7b07f15185eb" width="125" height="250">
@@ -62,6 +60,7 @@ Please feel free to contact me for any tips!
   <li>openpyxl library</li>
   <li>time library</li>
   <li>datetime library</li>
+  <li>or you can use requirements.txt</li>
 </ul>
 
 
