@@ -142,12 +142,7 @@ def main(page: ft.Page):
                                          int(walked_steps_entry.value)]
                     ws.append(insert_into_excel)
 
-            except ValueError:
-                page.dialog = incomplete_dialog
-                incomplete_dialog.open = True
-                page.update()
-
-            except EOFError:
+            except ValueError or EOFError:
                 page.dialog = incomplete_dialog
                 incomplete_dialog.open = True
                 page.update()
@@ -215,8 +210,7 @@ def main(page: ft.Page):
         content=ft.Text("Vyber datum prosím"),
         actions=[
             ft.ElevatedButton("Jdu vybrat", on_click=go_pick_date)
-        ]
-    )
+        ])
 
     success_dialog = ft.AlertDialog(
         modal=True,
@@ -305,8 +299,7 @@ def main(page: ft.Page):
                                      top=280,
                                      width=180,
                                      height=35,
-                                     content=date_button,
-                                     on_click=lambda _: date_picker.pick_date()),
+                                     content=date_button),
                         ft.Container(right=90,
                                      top=325,
                                      height=50,
@@ -316,14 +309,13 @@ def main(page: ft.Page):
                                      top=420,
                                      width=200,
                                      height=30,
-                                     content=ft.FilledButton("Přidej nový záznam"),
-                                     on_click=lambda _: page.go("/new")),
+                                     content=ft.FilledButton("Přidej nový záznam", on_click=lambda _:
+                                            page.go("/new"))),
                         ft.Container(right=90,
                                      bottom=195,
                                      width=200,
                                      height=50,
-                                     content=open_maps,
-                                     on_click=open_google_maps),
+                                     content=open_maps),
                         ft.Container(right=5,
                                      bottom=80,
                                      width=100,
