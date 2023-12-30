@@ -79,7 +79,7 @@ def main(page: ft.Page):
         page.update()
         return data_table
 
-    def show_statistics(e):
+    def statistics(e):
         file_st = "walking_data.xlsx"
         workbook = openpyxl.load_workbook(file_st, data_only=True)
         worksheet = workbook['Sheet1']
@@ -401,7 +401,7 @@ def main(page: ft.Page):
                                 width=page.window_width,
                                 height=page.window_height,
                                 fit=ft.ImageFit.FILL),
-                            ft.Container(content=ft.Text("{} Km".format(round(show_statistics("e")[0], 2))),
+                            ft.Container(content=ft.Text("{} Km".format(round(statistics("e")[0], 2))),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -411,7 +411,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=20),
-                            ft.Container(content=ft.Text("{} hod.".format(show_statistics("e")[1])),
+                            ft.Container(content=ft.Text("{} hod.".format(statistics("e")[1])),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -421,7 +421,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=150),
-                            ft.Container(content=ft.Text("{} Kcal".format(show_statistics("e")[2])),
+                            ft.Container(content=ft.Text("{} Kcal".format(statistics("e")[2])),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -431,7 +431,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=280),
-                            ft.Container(content=ft.Text("{} kroků".format(show_statistics("e")[3])),
+                            ft.Container(content=ft.Text("{} kroků".format(statistics("e")[3])),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
