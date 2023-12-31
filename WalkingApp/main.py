@@ -2,7 +2,9 @@ import openpyxl
 from openpyxl.styles import Alignment, PatternFill, Border, Side
 import flet as ft
 from datetime import datetime, timedelta
+import re
 
+pattern = r'(\d+:\d+)'
 
 def main(page: ft.Page):
     page.title = "WalkingApp"
@@ -120,9 +122,19 @@ def main(page: ft.Page):
     def open_google_maps(e):
         page.launch_url("https://mapy.cz/")
 
+    def save_time_entry(walked_time_entry_value):
+        if re.search(pattern, walked_time_entry_value):
+            time_format_save = f"{walked_time_entry_value}:00"
+            return time_format_save
+        else:
+            time_format_save = f"{walked_time_entry_value}:00:00"
+            return time_format_save
+
     def save_kms(e):
         try:
-            pass
+            if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
+                        walked_steps_entry.value]):
+                raise ValueError
         except ValueError:
             page.dialog = incomplete_dialog
             incomplete_dialog.open = True
@@ -137,7 +149,7 @@ def main(page: ft.Page):
                         walked_steps_entry.value) != "" and walked_kms_entry.value != "":
                     insert_into_excel = [date_picker.value.strftime("%d/%m/%y"),
                                          float(walked_kms_entry.value),
-                                         f"{walked_time_entry.value}:00",
+                                         save_time_entry(walked_time_entry.value),
                                          int(walked_kcal_entry.value),
                                          int(walked_steps_entry.value)]
                     ws.append(insert_into_excel)
