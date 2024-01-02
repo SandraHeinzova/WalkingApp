@@ -9,24 +9,16 @@ pattern = r'(\d+:\d+)'
 
 # FUNCTIONS THAT WORKS WITH EXCEL
 
-def data_for_table(e):
-    file_fill = "/Users/heinzovi/Desktop/Python projects/WalkingApp/WalkingApp/walking_data.xlsx"
+def data_for_table():
+    file_fill = "walking_data.xlsx"
     wb = openpyxl.load_workbook(file_fill, data_only=True)
     ws = wb['Sheet1']
 
     data = []
-    for num in range(ws.max_row - 3, ws.max_row + 1):
-        temporary = tuple()
-        for col in ["a", "b"]:
-            index = col + str(num)
-            cell_value = ws[index].value
-
-            if isinstance(cell_value, datetime):
-                formatted_date = cell_value.strftime('%d/%m/%Y')
-                temporary += (formatted_date,)
-            else:
-                temporary += (cell_value,)
-        data.append(temporary)
+    for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
+        date = ws[f'a{num}'].value.strftime('%d/%m/%Y')
+        kms = ws[f'b{num}'].value
+        data.append((date, kms))
 
     wb.close()
     return data
@@ -70,23 +62,22 @@ def main(page: ft.Page):
 
     def success(e):
         success_dialog.open = False
-        fill_table(data_for_table("e"))
+        fill_table()
         page.update()
 
     def go_pick_date(e):
         no_date_picked_dialog.open = False
         page.update()
 
-    def fill_table(data):
+    def fill_table():
         data_table.rows = []
-        for one_tuple in data:
-            data_table.rows.append(
-                ft.DataRow(
-                    [ft.DataCell(ft.Text(one_tuple[0])), ft.DataCell(ft.Text(one_tuple[1]))]
-                ))
-        data_table.rows.reverse()
+
+        data_table.rows = [
+            ft.DataRow(
+                [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
+            ) for date, kms in data_for_table()
+        ]
         page.update()
-        return data_table
 
     def statistics(e):
         file_st = "walking_data.xlsx"
@@ -285,7 +276,7 @@ def main(page: ft.Page):
         rows=[]
     )
 
-    fill_table(data_for_table("e"))
+    fill_table()
     page.overlay.append(date_picker)
 
     open_maps = ft.Chip(
