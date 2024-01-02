@@ -1,11 +1,38 @@
 import openpyxl
-from openpyxl.styles import Alignment, PatternFill, Border, Side
+from openpyxl.styles import Alignment, Border, Side
 import flet as ft
 from datetime import datetime, timedelta
 import re
 
 pattern = r'(\d+:\d+)'
 
+
+# FUNCTIONS THAT WORKS WITH EXCEL
+
+def data_for_table(e):
+    file_fill = "/Users/heinzovi/Desktop/Python projects/WalkingApp/WalkingApp/walking_data.xlsx"
+    wb = openpyxl.load_workbook(file_fill, data_only=True)
+    ws = wb['Sheet1']
+
+    data = []
+    for num in range(ws.max_row - 3, ws.max_row + 1):
+        temporary = tuple()
+        for col in ["a", "b"]:
+            index = col + str(num)
+            cell_value = ws[index].value
+
+            if isinstance(cell_value, datetime):
+                formatted_date = cell_value.strftime('%d/%m/%Y')
+                temporary += (formatted_date,)
+            else:
+                temporary += (cell_value,)
+        data.append(temporary)
+
+    wb.close()
+    return data
+
+
+# MAIN BODY OF THE APP WRAP IN FUNCTION MAIN
 def main(page: ft.Page):
     page.title = "WalkingApp"
     page.padding = 0
@@ -43,41 +70,21 @@ def main(page: ft.Page):
 
     def success(e):
         success_dialog.open = False
-        fill_table("e")
+        fill_table(data_for_table("e"))
         page.update()
 
     def go_pick_date(e):
         no_date_picked_dialog.open = False
         page.update()
 
-    def fill_table(e):
-        data_table.columns = []
+    def fill_table(data):
         data_table.rows = []
-
-        file_fill = "walking_data.xlsx"
-        wb = openpyxl.load_workbook(file_fill, data_only=True)
-        ws = wb['Sheet1']
-
-        for each in ['a', 'b']:
-            data_table.columns.append(ft.DataColumn(ft.Text(ws[each + '3'].value)))
-
-        data = {}
-        for num in range(ws.max_row - 3, ws.max_row + 1):
-            temporary = []
-            for col in ["a", "b"]:
-                index = col + str(num)
-                cell_value = ws[index].value
-
-                if isinstance(cell_value, datetime):
-                    formatted_date = cell_value.strftime('%d/%m/%Y')
-                    data[index] = ft.Text(formatted_date)
-                else:
-                    data[index] = ft.Text(cell_value)
-
-                temporary.append(ft.DataCell(data[index], data=index))
-            data_table.rows.append(ft.DataRow(temporary))
+        for one_tuple in data:
+            data_table.rows.append(
+                ft.DataRow(
+                    [ft.DataCell(ft.Text(one_tuple[0])), ft.DataCell(ft.Text(one_tuple[1]))]
+                ))
         data_table.rows.reverse()
-        wb.close()
         page.update()
         return data_table
 
@@ -177,13 +184,11 @@ def main(page: ft.Page):
             for x in range(1, 6):
                 cell = ws.cell(row=ws.max_row, column=x)
                 cell.alignment = Alignment(horizontal="right")
-                new_fill = PatternFill(fill_type="solid", fgColor="99CC99")
                 thin_border = Border(left=Side(style='thin'),
                                      right=Side(style='thin'),
                                      top=Side(style='thin'),
                                      bottom=Side(style='thin'))
                 cell.border = thin_border
-                cell.fill = new_fill
 
             ws["H2"].value = "=SUM(B:B)"
             wb.save("walking_data.xlsx")
@@ -229,7 +234,7 @@ def main(page: ft.Page):
         title=ft.Text("Úspěch"),
         content=ft.Text("Vše bylo úspěšně zapsáno"),
         actions=[
-            ft.ElevatedButton("Super", on_click=success)
+            ft.ElevatedButton("OK", on_click=success)
         ])
 
     walked_kms_entry = ft.TextField(label="Kolik jsi ušel?",
@@ -240,7 +245,7 @@ def main(page: ft.Page):
                                                                 replacement_string=""),
                                     keyboard_type=ft.KeyboardType.NUMBER)
     walked_time_entry = ft.TextField(label="Za jak dlouho?",
-                                     hint_text="h:mm",
+                                     hint_text="hodiny:minuty",
                                      width=160,
                                      border_radius=0,
                                      input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9:]",
@@ -273,11 +278,14 @@ def main(page: ft.Page):
 
     data_table = ft.DataTable(
         bgcolor=ft.colors.WHITE54,
-        columns=[],
+        columns=[
+            ft.DataColumn(ft.Text("Datum")),
+            ft.DataColumn(ft.Text("Kilometry")),
+        ],
         rows=[]
     )
 
-    fill_table("e")
+    fill_table(data_for_table("e"))
     page.overlay.append(date_picker)
 
     open_maps = ft.Chip(
