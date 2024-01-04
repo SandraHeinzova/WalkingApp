@@ -1,5 +1,4 @@
 import openpyxl
-from openpyxl.styles import Alignment, Border, Side
 import flet as ft
 from datetime import datetime, timedelta
 import re
@@ -9,6 +8,7 @@ pattern = r'(\d+:\d+)'
 
 # FUNCTIONS THAT WORKS WITH EXCEL
 
+
 def data_for_table():
     file_fill = "walking_data.xlsx"
     wb = openpyxl.load_workbook(file_fill, data_only=True)
@@ -16,12 +16,26 @@ def data_for_table():
 
     data = []
     for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
-        date = ws[f'a{num}'].value.strftime('%d/%m/%Y')
+        date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
         kms = ws[f'b{num}'].value
         data.append((date, kms))
 
     wb.close()
     return data
+
+
+def save_to_excel(date, kms: float, time, kcal: int, steps: int):
+    file_save = "walking_data.xlsx"
+    wb = openpyxl.load_workbook(file_save)
+    ws = wb['Sheet1']
+    insert_into_excel = [date,
+                         kms,
+                         time,
+                         kcal,
+                         steps]
+    ws.append(insert_into_excel)
+    wb.save("walking_data.xlsx")
+    wb.close()
 
 
 # MAIN BODY OF THE APP WRAP IN FUNCTION MAIN
@@ -71,7 +85,6 @@ def main(page: ft.Page):
 
     def fill_table():
         data_table.rows = []
-
         data_table.rows = [
             ft.DataRow(
                 [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
@@ -128,62 +141,41 @@ def main(page: ft.Page):
             time_format_save = f"{walked_time_entry_value}:00:00"
             return time_format_save
 
-    def save_kms(e):
+    def save_clicked(e):
         try:
             if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                         walked_steps_entry.value]):
                 raise ValueError
+            if not date_picker.value:
+                raise AttributeError
+
         except ValueError:
             page.dialog = incomplete_dialog
             incomplete_dialog.open = True
             page.update()
+
+        except AttributeError:
+            page.dialog = no_date_picked_dialog
+            no_date_picked_dialog.open = True
+            page.update()
+            page.go("/")
+
         else:
-            file = "walking_data.xlsx"
-            wb = openpyxl.load_workbook(file)
-            ws = wb['Sheet1']
+            date = date_picker.value.strftime("%d/%m/%y")
+            kms = float(walked_kms_entry.value)
+            time = save_time_entry(walked_time_entry.value)
+            kcal = int(walked_kcal_entry.value)
+            steps = int(walked_steps_entry.value)
 
-            try:
-                if int(walked_kcal_entry.value) != "" and int(
-                        walked_steps_entry.value) != "" and walked_kms_entry.value != "":
-                    insert_into_excel = [date_picker.value.strftime("%d/%m/%y"),
-                                         float(walked_kms_entry.value),
-                                         save_time_entry(walked_time_entry.value),
-                                         int(walked_kcal_entry.value),
-                                         int(walked_steps_entry.value)]
-                    ws.append(insert_into_excel)
+            save_to_excel(date, kms, time, kcal, steps)
 
-            except ValueError or EOFError:
-                page.dialog = incomplete_dialog
-                incomplete_dialog.open = True
-                page.update()
+            page.dialog = success_dialog
+            success_dialog.open = True
 
-            except AttributeError:
-                page.dialog = no_date_picked_dialog
-                no_date_picked_dialog.open = True
-                page.update()
-                page.go("/")
-
-            else:
-                page.dialog = success_dialog
-                success_dialog.open = True
-                walked_kms_entry.value = ""
-                walked_time_entry.value = ""
-                walked_kcal_entry.value = ""
-                walked_steps_entry.value = ""
-                page.update()
-
-            for x in range(1, 6):
-                cell = ws.cell(row=ws.max_row, column=x)
-                cell.alignment = Alignment(horizontal="right")
-                thin_border = Border(left=Side(style='thin'),
-                                     right=Side(style='thin'),
-                                     top=Side(style='thin'),
-                                     bottom=Side(style='thin'))
-                cell.border = thin_border
-
-            ws["H2"].value = "=SUM(B:B)"
-            wb.save("walking_data.xlsx")
-            wb.close()
+            walked_kms_entry.value = ""
+            walked_time_entry.value = ""
+            walked_kcal_entry.value = ""
+            walked_steps_entry.value = ""
             page.update()
 
     # CONTROLS OF THE APP - DIALOGUES, BUTTONS, TEXTS
@@ -371,7 +363,7 @@ def main(page: ft.Page):
                                          top=110,
                                          left=200,
                                          bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=ft.ElevatedButton(text="Uložit", on_click=save_kms),
+                            ft.Container(content=ft.ElevatedButton(text="Uložit", on_click=save_clicked),
                                          top=200,
                                          left=20),
                             ft.Container(content=ft.ElevatedButton("Ukaž statistiky", on_click=open_statistics),
