@@ -3,8 +3,8 @@ import flet as ft
 from datetime import datetime, timedelta
 import re
 
-pattern_hours_minutes = r'^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$'
-pattern_hours = r'^\d{1,2}$'
+pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
+pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
 # FUNCTIONS THAT WORKS WITH EXCEL
@@ -50,8 +50,6 @@ def main(page: ft.Page):
     page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
 
-    #  FUNCTION BODY OF THE APP
-
     def window_event(e):
         if e.data == "close" or e.name == "click":
             page.dialog = confirm_dialog
@@ -63,30 +61,6 @@ def main(page: ft.Page):
 
     def open_statistics(e):
         page.go("/statistics")
-
-    def yes_click(e):
-        page.window_destroy()
-
-    def no_click(e):
-        confirm_dialog.open = False
-        page.update()
-
-    def return_back(e):
-        incomplete_dialog.open = False
-        page.update()
-
-    def success(e):
-        success_dialog.open = False
-        fill_recent_walks_table()
-        page.update()
-
-    def go_pick_date(e):
-        no_date_picked_dialog.open = False
-        page.update()
-
-    def fix_time(e):
-        wrong_time_dialog.open = False
-        page.update()
 
     def fill_recent_walks_table():
         data_table.rows = []
@@ -104,12 +78,9 @@ def main(page: ft.Page):
         column_km = worksheet["B"]
         column_kcal = worksheet["D"]
         column_steps = worksheet["E"]
-        total_km, total_kcal, total_steps = 0, 0, 0
         total_time = timedelta()
 
-        for cell in column_km:
-            if isinstance(cell.value, (int, float)):
-                total_km += float(cell.value)
+        total_km = sum(float(cell.value) for cell in column_km if isinstance(cell.value, (int, float)))
 
         for row in worksheet.iter_rows(min_row=4, max_col=3, values_only=True):
             time = datetime.strptime(str(row[2]), "%H:%M:%S").time()
@@ -120,13 +91,9 @@ def main(page: ft.Page):
             )
             total_time += time_timedelta
 
-        for cell in column_kcal:
-            if isinstance(cell.value, (int, float)):
-                total_kcal += int(cell.value)
+        total_kcal = sum(int(cell.value) for cell in column_kcal if isinstance(cell.value, (int, float)))
 
-        for cell in column_steps:
-            if isinstance(cell.value, (int, float)):
-                total_steps += int(cell.value)
+        total_steps = sum(int(cell.value) for cell in column_steps if isinstance(cell.value, (int, float)))
 
         workbook.close()
         return total_km, total_time, total_kcal, total_steps
@@ -157,34 +124,34 @@ def main(page: ft.Page):
             page.dialog = incomplete_dialog
             incomplete_dialog.open = True
             page.update()
+            return
 
         if not date_picker.value:
             page.dialog = no_date_picked_dialog
             no_date_picked_dialog.open = True
             page.update()
             page.go("/")
+            return
 
-        elif all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
-                  walked_steps_entry.value]):
-            date = date_picker.value.strftime("%d/%m/%y")
-            kms = float(walked_kms_entry.value)
-            time = save_time_entry(walked_time_entry.value)
-            kcal = int(walked_kcal_entry.value)
-            steps = int(walked_steps_entry.value)
+        date = date_picker.value.strftime("%d/%m/%y")
+        kms = float(walked_kms_entry.value)
+        time = save_time_entry(walked_time_entry.value)
+        kcal = int(walked_kcal_entry.value)
+        steps = int(walked_steps_entry.value)
 
-            if time is None:
-                return
-            else:
-                save_to_excel(date, kms, time, kcal, steps)
+        if time is None:
+            return
 
-                page.dialog = success_dialog
-                success_dialog.open = True
+        save_to_excel(date, kms, time, kcal, steps)
 
-            walked_kms_entry.value = ""
-            walked_time_entry.value = ""
-            walked_kcal_entry.value = ""
-            walked_steps_entry.value = ""
-            page.update()
+        page.dialog = success_dialog
+        success_dialog.open = True
+
+        walked_kms_entry.value = ""
+        walked_time_entry.value = ""
+        walked_kcal_entry.value = ""
+        walked_steps_entry.value = ""
+        page.update()
 
     # CONTROLS OF THE APP - DIALOGUES, BUTTONS, TEXTS
 
@@ -192,6 +159,13 @@ def main(page: ft.Page):
                           color=ft.colors.INDIGO,
                           style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                           text_align=ft.TextAlign.CENTER)
+
+    def yes_click(e):
+        page.window_destroy()
+
+    def no_click(e):
+        confirm_dialog.open = False
+        page.update()
 
     confirm_dialog = ft.AlertDialog(
         modal=True,
@@ -204,6 +178,10 @@ def main(page: ft.Page):
         actions_alignment=ft.MainAxisAlignment.END,
     )
 
+    def return_back(e):
+        incomplete_dialog.open = False
+        page.update()
+
     incomplete_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Něco jsi zapomněl"),
@@ -211,6 +189,10 @@ def main(page: ft.Page):
         actions=[
             ft.ElevatedButton("OK, doplním", on_click=return_back)
         ])
+
+    def fix_time(e):
+        wrong_time_dialog.open = False
+        page.update()
 
     wrong_time_dialog = ft.AlertDialog(
         modal=True,
@@ -220,6 +202,10 @@ def main(page: ft.Page):
             ft.ElevatedButton("OK", on_click=fix_time)
         ])
 
+    def go_pick_date(e):
+        no_date_picked_dialog.open = False
+        page.update()
+
     no_date_picked_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Chybí vybrané datum"),
@@ -227,6 +213,11 @@ def main(page: ft.Page):
         actions=[
             ft.ElevatedButton("Jdu vybrat", on_click=go_pick_date)
         ])
+
+    def success(e):
+        success_dialog.open = False
+        fill_recent_walks_table()
+        page.update()
 
     success_dialog = ft.AlertDialog(
         modal=True,
