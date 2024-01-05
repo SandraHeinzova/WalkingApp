@@ -3,7 +3,8 @@ import flet as ft
 from datetime import datetime, timedelta
 import re
 
-pattern = r'(\d+:\d+)'
+pattern_time1 = r'^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$'
+pattern_time2 = r'^\d{1,2}$'
 
 
 # FUNCTIONS THAT WORKS WITH EXCEL
@@ -83,6 +84,10 @@ def main(page: ft.Page):
         no_date_picked_dialog.open = False
         page.update()
 
+    def fix_time(e):
+        wrong_time_input.open = False
+        page.update()
+
     def fill_table():
         data_table.rows = []
         data_table.rows = [
@@ -134,12 +139,17 @@ def main(page: ft.Page):
         page.launch_url("https://mapy.cz/")
 
     def save_time_entry(walked_time_entry_value):
-        if re.search(pattern, walked_time_entry_value):
-            time_format_save = f"{walked_time_entry_value}:00"
-            return time_format_save
+        if re.search(pattern_time1, walked_time_entry_value):
+            time_format_to_save = f"{walked_time_entry_value}:00"
+            return time_format_to_save
+        elif re.search(pattern_time2, walked_time_entry_value):
+            time_format_to_save = f"{walked_time_entry_value}:00:00"
+            return time_format_to_save
         else:
-            time_format_save = f"{walked_time_entry_value}:00:00"
-            return time_format_save
+            page.dialog = wrong_time_input
+            wrong_time_input.open = True
+            page.update()
+            return None
 
     def save_clicked(e):
         if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
@@ -162,10 +172,13 @@ def main(page: ft.Page):
             kcal = int(walked_kcal_entry.value)
             steps = int(walked_steps_entry.value)
 
-            save_to_excel(date, kms, time, kcal, steps)
+            if time is None:
+                return
+            else:
+                save_to_excel(date, kms, time, kcal, steps)
 
-            page.dialog = success_dialog
-            success_dialog.open = True
+                page.dialog = success_dialog
+                success_dialog.open = True
 
             walked_kms_entry.value = ""
             walked_time_entry.value = ""
@@ -197,6 +210,14 @@ def main(page: ft.Page):
         content=ft.Text("Vše musí být vyplněno"),
         actions=[
             ft.ElevatedButton("OK, doplním", on_click=return_back)
+        ])
+
+    wrong_time_input = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Špatný formát času"),
+        content=ft.Text("Zadej prosím celé hodiny, nebo hodiny a minuty."),
+        actions=[
+            ft.ElevatedButton("OK", on_click=fix_time)
         ])
 
     no_date_picked_dialog = ft.AlertDialog(
