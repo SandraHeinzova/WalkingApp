@@ -142,25 +142,20 @@ def main(page: ft.Page):
             return time_format_save
 
     def save_clicked(e):
-        try:
-            if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
-                        walked_steps_entry.value]):
-                raise ValueError
-            if not date_picker.value:
-                raise AttributeError
-
-        except ValueError:
+        if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
+                    walked_steps_entry.value]):
             page.dialog = incomplete_dialog
             incomplete_dialog.open = True
             page.update()
 
-        except AttributeError:
+        if not date_picker.value:
             page.dialog = no_date_picked_dialog
             no_date_picked_dialog.open = True
             page.update()
             page.go("/")
 
-        else:
+        elif all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
+                  walked_steps_entry.value]):
             date = date_picker.value.strftime("%d/%m/%y")
             kms = float(walked_kms_entry.value)
             time = save_time_entry(walked_time_entry.value)
