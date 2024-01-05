@@ -3,14 +3,14 @@ import flet as ft
 from datetime import datetime, timedelta
 import re
 
-pattern_time1 = r'^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$'
-pattern_time2 = r'^\d{1,2}$'
+pattern_hours_minutes = r'^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$'
+pattern_hours = r'^\d{1,2}$'
 
 
 # FUNCTIONS THAT WORKS WITH EXCEL
 
 
-def data_for_table():
+def get_recent_walks():
     file_fill = "walking_data.xlsx"
     wb = openpyxl.load_workbook(file_fill, data_only=True)
     ws = wb['Sheet1']
@@ -77,7 +77,7 @@ def main(page: ft.Page):
 
     def success(e):
         success_dialog.open = False
-        fill_table()
+        fill_recent_walks_table()
         page.update()
 
     def go_pick_date(e):
@@ -85,15 +85,15 @@ def main(page: ft.Page):
         page.update()
 
     def fix_time(e):
-        wrong_time_input.open = False
+        wrong_time_dialog.open = False
         page.update()
 
-    def fill_table():
+    def fill_recent_walks_table():
         data_table.rows = []
         data_table.rows = [
             ft.DataRow(
                 [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-            ) for date, kms in data_for_table()
+            ) for date, kms in get_recent_walks()
         ]
         page.update()
 
@@ -139,15 +139,15 @@ def main(page: ft.Page):
         page.launch_url("https://mapy.cz/")
 
     def save_time_entry(walked_time_entry_value):
-        if re.search(pattern_time1, walked_time_entry_value):
+        if re.search(pattern_hours_minutes, walked_time_entry_value):
             time_format_to_save = f"{walked_time_entry_value}:00"
             return time_format_to_save
-        elif re.search(pattern_time2, walked_time_entry_value):
+        elif re.search(pattern_hours, walked_time_entry_value):
             time_format_to_save = f"{walked_time_entry_value}:00:00"
             return time_format_to_save
         else:
-            page.dialog = wrong_time_input
-            wrong_time_input.open = True
+            page.dialog = wrong_time_dialog
+            wrong_time_dialog.open = True
             page.update()
             return None
 
@@ -212,7 +212,7 @@ def main(page: ft.Page):
             ft.ElevatedButton("OK, doplním", on_click=return_back)
         ])
 
-    wrong_time_input = ft.AlertDialog(
+    wrong_time_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Špatný formát času"),
         content=ft.Text("Zadej prosím celé hodiny, nebo hodiny a minuty."),
@@ -284,7 +284,7 @@ def main(page: ft.Page):
         rows=[]
     )
 
-    fill_table()
+    fill_recent_walks_table()
     page.overlay.append(date_picker)
 
     open_maps = ft.Chip(
