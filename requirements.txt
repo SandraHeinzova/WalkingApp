@@ -7,9 +7,9 @@ charset-normalizer==3.3.2
 click==8.1.7
 cookiecutter==2.5.0
 et-xmlfile==1.1.0
-flet==0.17.0
-flet-core==0.17.0
-flet-runtime==0.17.0
+flet==0.18.0
+flet-core==0.18.0
+flet-runtime==0.18.0
 h11==0.14.0
 httpcore==0.17.3
 httpx==0.24.1
