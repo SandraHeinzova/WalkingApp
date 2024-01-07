@@ -10,8 +10,8 @@ Please feel free to contact me for any tips!
 <h2 align="center">How to run the App </h2>
 
 <ul>
-  <li>Get your copy of the main.py and walking_data.xlsx files and make sure, you have all required libraries.</li>
-  <li>Open the main.py on your PyCharm etc. and hit run.</li>
+  <li>Get your copy of the main.py and walking_data.xlsx (or empty new_template.xlsx) files and make sure, you have all required libraries.</li>
+  <li>Open the main.py on your PyCharm, VS Code etc. and hit run.</li>
   <li>Flet enables to develop mobile apps as well. If you want to test this app on your mobile phone 
       just follow <a href="https://flet.dev/docs/guides/python/testing-on-android">Flet Guide</a>. For now available for Android.  </li>
 </ul>
@@ -31,7 +31,7 @@ Please feel free to contact me for any tips!
 </p>
 
 <ul>
-  <li>The next page is for saving new records. The App asks for kilometers walked, time duration, amount of calories and number of steps (according to smart watches for example). Also on this page is small table with last 4 records. The Table shows just date and kilometres.The buttons here are exit button, saving button and button which shows overall statistics.</li>
+  <li>The next page is for saving new records. The App asks for kilometeres walked, time duration, amount of calories and number of steps (according to smart watches for example). Also on this page is small table with last 4 records. The Table shows just date and kilometres.The buttons here are exit button, saving button and button which shows overall statistics.</li>
   <li>The last page is with statistics. It shows the total amount of kilometres, the time spent walking, total calories burned and all of the steps.</li>
     <li>The data are stored in xlsx file. </li>
 </ul>
@@ -58,7 +58,7 @@ Please feel free to contact me for any tips!
   <li>Python 3.12.1</li>
   <li>Flet 0.17.0</li>
   <li>openpyxl library</li>
-  <li>time library</li>
+  <li>re library</li>
   <li>datetime library</li>
   <li>or you can use requirements.txt</li>
 </ul>
