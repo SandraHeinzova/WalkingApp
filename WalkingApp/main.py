@@ -8,12 +8,20 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
 # FUNCTIONS THAT WORKS WITH EXCEL
+def open_excel(data):
+    try:
+        file = "walking_data.xlsx"
+        load_file = openpyxl.load_workbook(file, data_only=data)
+        return load_file
+    except FileNotFoundError:
+        template = "new_template.xlsx"
+        load_file = openpyxl.load_workbook(template, data_only=data)
+        return load_file
 
 
 def get_recent_walks():
-    file_fill = "walking_data.xlsx"
-    wb = openpyxl.load_workbook(file_fill, data_only=True)
-    ws = wb['Sheet1']
+    wb = open_excel(True)
+    ws = wb["Sheet1"]
 
     data = []
     for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
@@ -26,17 +34,46 @@ def get_recent_walks():
 
 
 def save_to_excel(date, kms: float, time, kcal: int, steps: int):
-    file_save = "walking_data.xlsx"
-    wb = openpyxl.load_workbook(file_save)
-    ws = wb['Sheet1']
+    wb = open_excel(False)
+    ws = wb["Sheet1"]
+
     insert_into_excel = [date,
                          kms,
                          time,
                          kcal,
                          steps]
     ws.append(insert_into_excel)
+
     wb.save("walking_data.xlsx")
     wb.close()
+
+
+def statistics(e):
+    workbook = open_excel(True)
+    worksheet = workbook["Sheet1"]
+
+    column_km = worksheet["B"]
+    column_kcal = worksheet["D"]
+    column_steps = worksheet["E"]
+    total_time = timedelta()
+
+    total_km = sum(float(cell.value) for cell in column_km if isinstance(cell.value, (int, float)))
+
+    for row in worksheet.iter_rows(min_row=4, max_col=3, values_only=True):
+        time = datetime.strptime(str(row[2]), "%H:%M:%S").time()
+        time_timedelta = timedelta(
+            hours=time.hour,
+            minutes=time.minute,
+            seconds=time.second
+        )
+        total_time += time_timedelta
+
+    total_kcal = sum(int(cell.value) for cell in column_kcal if isinstance(cell.value, (int, float)))
+
+    total_steps = sum(int(cell.value) for cell in column_steps if isinstance(cell.value, (int, float)))
+
+    workbook.close()
+    return total_km, total_time, total_kcal, total_steps
 
 
 # MAIN BODY OF THE APP WRAP IN FUNCTION MAIN
@@ -70,33 +107,6 @@ def main(page: ft.Page):
             ) for date, kms in get_recent_walks()
         ]
         page.update()
-
-    def statistics(e):
-        file_st = "walking_data.xlsx"
-        workbook = openpyxl.load_workbook(file_st, data_only=True)
-        worksheet = workbook['Sheet1']
-        column_km = worksheet["B"]
-        column_kcal = worksheet["D"]
-        column_steps = worksheet["E"]
-        total_time = timedelta()
-
-        total_km = sum(float(cell.value) for cell in column_km if isinstance(cell.value, (int, float)))
-
-        for row in worksheet.iter_rows(min_row=4, max_col=3, values_only=True):
-            time = datetime.strptime(str(row[2]), "%H:%M:%S").time()
-            time_timedelta = timedelta(
-                hours=time.hour,
-                minutes=time.minute,
-                seconds=time.second
-            )
-            total_time += time_timedelta
-
-        total_kcal = sum(int(cell.value) for cell in column_kcal if isinstance(cell.value, (int, float)))
-
-        total_steps = sum(int(cell.value) for cell in column_steps if isinstance(cell.value, (int, float)))
-
-        workbook.close()
-        return total_km, total_time, total_kcal, total_steps
 
     def pick_date(e):
         picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
