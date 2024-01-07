@@ -24,9 +24,29 @@ def get_recent_walks():
     ws = wb["Sheet1"]
 
     data = []
-    for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
-        date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
-        kms = ws[f'b{num}'].value
+    if ws.max_row >= 5:
+        for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
+            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
+            kms = ws[f'b{num}'].value
+            data.append((date, kms))
+    elif ws.max_row == 4:
+        for num in reversed(range(ws.max_row - 2, ws.max_row + 1)):
+            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
+            kms = ws[f'b{num}'].value
+            data.append((date, kms))
+    elif ws.max_row == 3:
+        for num in reversed(range(ws.max_row - 1, ws.max_row + 1)):
+            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
+            kms = ws[f'b{num}'].value
+            data.append((date, kms))
+    elif ws.max_row == 2:
+        for num in reversed(range(ws.max_row, ws.max_row + 1)):
+            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
+            kms = ws[f'b{num}'].value
+            data.append((date, kms))
+    else:
+        date = "Žádné záznamy"
+        kms = ""
         data.append((date, kms))
 
     wb.close()
