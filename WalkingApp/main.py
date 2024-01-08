@@ -24,30 +24,15 @@ def get_recent_walks():
     ws = wb["Sheet1"]
 
     data = []
-    if ws.max_row >= 5:
-        for num in reversed(range(ws.max_row - 3, ws.max_row + 1)):
+    if ws.max_row >= 2:
+        num_records = min(ws.max_row - 1, 4)
+        for num in range(ws.max_row, ws.max_row - num_records, -1):
             date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
             kms = ws[f'b{num}'].value
             data.append((date, kms))
-    elif ws.max_row == 4:
-        for num in reversed(range(ws.max_row - 2, ws.max_row + 1)):
-            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
-            kms = ws[f'b{num}'].value
-            data.append((date, kms))
-    elif ws.max_row == 3:
-        for num in reversed(range(ws.max_row - 1, ws.max_row + 1)):
-            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
-            kms = ws[f'b{num}'].value
-            data.append((date, kms))
-    elif ws.max_row == 2:
-        for num in reversed(range(ws.max_row, ws.max_row + 1)):
-            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
-            kms = ws[f'b{num}'].value
-            data.append((date, kms))
+
     else:
-        date = "Žádné záznamy"
-        kms = ""
-        data.append((date, kms))
+        pass
 
     wb.close()
     return data
@@ -120,13 +105,19 @@ def main(page: ft.Page):
         page.go("/statistics")
 
     def fill_recent_walks_table():
-        data_table.rows = []
-        data_table.rows = [
-            ft.DataRow(
-                [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-            ) for date, kms in get_recent_walks()
-        ]
-        page.update()
+        if get_recent_walks():
+            data_table.rows = []
+            data_table.rows = [
+                ft.DataRow(
+                    [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
+                ) for date, kms in get_recent_walks()
+            ]
+            page.update()
+        else:
+            data_table.rows = [
+                ft.DataRow(
+                    [ft.DataCell(ft.Text("Žádné záznamy")), ft.DataCell(ft.Text(""))])]
+            page.update()
 
     def pick_date(e):
         picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
