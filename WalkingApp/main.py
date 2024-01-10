@@ -103,18 +103,15 @@ def main(page: ft.Page):
 
     def fill_recent_walks_table():
         recent_walks = get_recent_walks()
-        if recent_walks:
-            data_table.rows = [
-                ft.DataRow(
-                    [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-                ) for date, kms in recent_walks
-            ]
-            page.update()
-        else:
-            data_table.rows = [
-                ft.DataRow(
-                    [ft.DataCell(ft.Text("Žádné záznamy")), ft.DataCell(ft.Text(""))])]
-            page.update()
+        data_rows = [
+            ft.DataRow(
+                [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
+            ) for date, kms in recent_walks
+        ] if recent_walks else [
+            ft.DataRow(
+                [ft.DataCell(ft.Text("Žádné záznamy")), ft.DataCell(ft.Text(""))])]
+        data_table.rows = data_rows
+        page.update()
 
     def pick_date(_):
         picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
