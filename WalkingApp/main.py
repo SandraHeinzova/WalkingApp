@@ -31,9 +31,6 @@ def get_recent_walks():
             kms = ws[f'b{num}'].value
             data.append((date, kms))
 
-    else:
-        pass
-
     wb.close()
     return data
 
@@ -53,7 +50,7 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     wb.close()
 
 
-def statistics(e):
+def statistics():
     workbook = open_excel(True)
     worksheet = workbook["Sheet1"]
 
@@ -64,7 +61,7 @@ def statistics(e):
 
     total_km = sum(float(cell.value) for cell in column_km if isinstance(cell.value, (int, float)))
 
-    for row in worksheet.iter_rows(min_row=4, max_col=3, values_only=True):
+    for row in worksheet.iter_rows(min_row=2, max_col=3, values_only=True):
         time = datetime.strptime(str(row[2]), "%H:%M:%S").time()
         time_timedelta = timedelta(
             hours=time.hour,
@@ -105,12 +102,12 @@ def main(page: ft.Page):
         page.go("/statistics")
 
     def fill_recent_walks_table():
-        if get_recent_walks():
-            data_table.rows = []
+        recent_walks = get_recent_walks()
+        if recent_walks:
             data_table.rows = [
                 ft.DataRow(
                     [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-                ) for date, kms in get_recent_walks()
+                ) for date, kms in recent_walks
             ]
             page.update()
         else:
@@ -416,6 +413,7 @@ def main(page: ft.Page):
             )
 
         if page.route == "/statistics":
+            total_km, total_time, total_kcal, total_steps = statistics()
             page.views.append(
                 ft.View(
                     "/statistics",
@@ -430,7 +428,7 @@ def main(page: ft.Page):
                                 width=page.window_width,
                                 height=page.window_height,
                                 fit=ft.ImageFit.FILL),
-                            ft.Container(content=ft.Text("{} Km".format(round(statistics("e")[0], 2))),
+                            ft.Container(content=ft.Text("{} Km".format(round(total_km))),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -440,7 +438,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=20),
-                            ft.Container(content=ft.Text("{} hod.".format(statistics("e")[1])),
+                            ft.Container(content=ft.Text("{} hod.".format(total_time)),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -450,7 +448,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=150),
-                            ft.Container(content=ft.Text("{} Kcal".format(statistics("e")[2])),
+                            ft.Container(content=ft.Text("{} Kcal".format(total_kcal)),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
@@ -460,7 +458,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=280),
-                            ft.Container(content=ft.Text("{} kroků".format(statistics("e")[3])),
+                            ft.Container(content=ft.Text("{} kroků".format(total_steps)),
                                          margin=10,
                                          padding=10,
                                          alignment=ft.alignment.center,
