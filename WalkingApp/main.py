@@ -98,7 +98,7 @@ def main(page: ft.Page):
     page.window_prevent_close = True
     page.on_window_event = window_event
 
-    def open_statistics(e):
+    def open_statistics(_):
         page.go("/statistics")
 
     def fill_recent_walks_table():
@@ -116,11 +116,11 @@ def main(page: ft.Page):
                     [ft.DataCell(ft.Text("Žádné záznamy")), ft.DataCell(ft.Text(""))])]
             page.update()
 
-    def pick_date(e):
+    def pick_date(_):
         picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
         page.update()
 
-    def open_google_maps(e):
+    def open_google_maps(_):
         page.launch_url("https://mapy.cz/")
 
     def save_time_entry(walked_time_entry_value):
@@ -136,7 +136,7 @@ def main(page: ft.Page):
             page.update()
             return None
 
-    def save_clicked(e):
+    def save_clicked(_):
         if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                     walked_steps_entry.value]):
             page.dialog = incomplete_dialog
@@ -178,10 +178,10 @@ def main(page: ft.Page):
                           style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                           text_align=ft.TextAlign.CENTER)
 
-    def yes_click(e):
+    def yes_click(_):
         page.window_destroy()
 
-    def no_click(e):
+    def no_click(_):
         confirm_dialog.open = False
         page.update()
 
@@ -196,7 +196,7 @@ def main(page: ft.Page):
         actions_alignment=ft.MainAxisAlignment.END,
     )
 
-    def return_back(e):
+    def return_back(_):
         incomplete_dialog.open = False
         page.update()
 
@@ -208,7 +208,7 @@ def main(page: ft.Page):
             ft.ElevatedButton("OK, doplním", on_click=return_back)
         ])
 
-    def fix_time(e):
+    def fix_time(_):
         wrong_time_dialog.open = False
         page.update()
 
@@ -220,7 +220,7 @@ def main(page: ft.Page):
             ft.ElevatedButton("OK", on_click=fix_time)
         ])
 
-    def go_pick_date(e):
+    def go_pick_date(_):
         no_date_picked_dialog.open = False
         page.update()
 
@@ -232,7 +232,7 @@ def main(page: ft.Page):
             ft.ElevatedButton("Jdu vybrat", on_click=go_pick_date)
         ])
 
-    def success(e):
+    def success(_):
         success_dialog.open = False
         fill_recent_walks_table()
         page.update()
@@ -304,7 +304,7 @@ def main(page: ft.Page):
 
     # GUI OF THE APP
 
-    def views(route):
+    def views(_):
         page.views.clear()
         page.views.append(
             ft.View(
@@ -337,8 +337,8 @@ def main(page: ft.Page):
                                      top=420,
                                      width=200,
                                      height=30,
-                                     content=ft.FilledButton("Přidej nový záznam", on_click=lambda _:
-                                     page.go("/new"))),
+                                     content=ft.FilledButton("Přidej nový záznam", on_click=lambda _: page.go
+                                     ("/new"))),
                         ft.Container(right=90,
                                      bottom=195,
                                      width=200,
@@ -483,7 +483,7 @@ def main(page: ft.Page):
             )
         page.update()
 
-    def view_pop(view):
+    def view_pop(_):
         page.views.pop()
         top_view = page.views[-1]
         page.go(top_view.route)
