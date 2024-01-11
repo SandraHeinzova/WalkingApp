@@ -102,15 +102,11 @@ def main(page: ft.Page):
         page.go("/statistics")
 
     def fill_recent_walks_table():
-        recent_walks = get_recent_walks()
-        data_rows = [
+        recent_walks = get_recent_walks() if get_recent_walks() else [("Žádné záznamy", "")]
+        data_table.rows = [
             ft.DataRow(
                 [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-            ) for date, kms in recent_walks
-        ] if recent_walks else [
-            ft.DataRow(
-                [ft.DataCell(ft.Text("Žádné záznamy")), ft.DataCell(ft.Text(""))])]
-        data_table.rows = data_rows
+            ) for date, kms in recent_walks]
         page.update()
 
     def pick_date(_):
