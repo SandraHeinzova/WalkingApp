@@ -102,7 +102,8 @@ def main(page: ft.Page):
         page.go("/statistics")
 
     def fill_recent_walks_table():
-        recent_walks = get_recent_walks() if get_recent_walks() else [("Žádné záznamy", "")]
+        walks_data = get_recent_walks()
+        recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
         data_table.rows = [
             ft.DataRow(
                 [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
