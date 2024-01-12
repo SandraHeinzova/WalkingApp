@@ -2,6 +2,7 @@ import openpyxl
 import flet as ft
 from datetime import datetime, timedelta
 import re
+import dialogs
 
 pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
@@ -91,9 +92,7 @@ def main(page: ft.Page):
 
     def window_event(e):
         if e.data == "close" or e.name == "click":
-            page.dialog = confirm_dialog
-            confirm_dialog.open = True
-            page.update()
+            dialogs.show_confirm_dialog(page)
 
     page.window_prevent_close = True
     page.on_window_event = window_event
@@ -125,23 +124,17 @@ def main(page: ft.Page):
             time_format_to_save = f"{walked_time_entry_value}:00:00"
             return time_format_to_save
         else:
-            page.dialog = wrong_time_dialog
-            wrong_time_dialog.open = True
-            page.update()
+            dialogs.show_wrong_time_dialog(page)
             return None
 
     def save_clicked(_):
         if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                     walked_steps_entry.value]):
-            page.dialog = incomplete_dialog
-            incomplete_dialog.open = True
-            page.update()
+            dialogs.show_incomplete_dialog(page)
             return
 
         if not date_picker.value:
-            page.dialog = no_date_picked_dialog
-            no_date_picked_dialog.open = True
-            page.update()
+            dialogs.show_no_date_picked_dialog(page)
             page.go("/")
             return
 
@@ -156,8 +149,7 @@ def main(page: ft.Page):
 
         save_to_excel(date, kms, time, kcal, steps)
 
-        page.dialog = success_dialog
-        success_dialog.open = True
+        dialogs.show_success_dialogue(page, fill_recent_walks_table)
 
         walked_kms_entry.value = ""
         walked_time_entry.value = ""
@@ -165,79 +157,12 @@ def main(page: ft.Page):
         walked_steps_entry.value = ""
         page.update()
 
-    # CONTROLS OF THE APP - DIALOGUES, BUTTONS, TEXTS
+    # CONTROLS OF THE APP - BUTTONS, TEXTS
 
     welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                           color=ft.colors.INDIGO,
                           style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                           text_align=ft.TextAlign.CENTER)
-
-    def yes_click(_):
-        page.window_destroy()
-
-    def no_click(_):
-        confirm_dialog.open = False
-        page.update()
-
-    confirm_dialog = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Potvrzení"),
-        content=ft.Text("Opravdu si přeješ apku ukončit?"),
-        actions=[
-            ft.ElevatedButton("Ano", on_click=yes_click),
-            ft.ElevatedButton("Ne", on_click=no_click),
-        ],
-        actions_alignment=ft.MainAxisAlignment.END,
-    )
-
-    def return_back(_):
-        incomplete_dialog.open = False
-        page.update()
-
-    incomplete_dialog = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Něco jsi zapomněl"),
-        content=ft.Text("Vše musí být vyplněno"),
-        actions=[
-            ft.ElevatedButton("OK, doplním", on_click=return_back)
-        ])
-
-    def fix_time(_):
-        wrong_time_dialog.open = False
-        page.update()
-
-    wrong_time_dialog = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Špatný formát času"),
-        content=ft.Text("Zadej prosím celé hodiny, nebo hodiny a minuty."),
-        actions=[
-            ft.ElevatedButton("OK", on_click=fix_time)
-        ])
-
-    def go_pick_date(_):
-        no_date_picked_dialog.open = False
-        page.update()
-
-    no_date_picked_dialog = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Chybí vybrané datum"),
-        content=ft.Text("Vyber datum prosím"),
-        actions=[
-            ft.ElevatedButton("Jdu vybrat", on_click=go_pick_date)
-        ])
-
-    def success(_):
-        success_dialog.open = False
-        fill_recent_walks_table()
-        page.update()
-
-    success_dialog = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Úspěch"),
-        content=ft.Text("Vše bylo úspěšně zapsáno"),
-        actions=[
-            ft.ElevatedButton("OK", on_click=success)
-        ])
 
     walked_kms_entry = ft.TextField(label="Kolik jsi ušel?",
                                     hint_text="km.m",
