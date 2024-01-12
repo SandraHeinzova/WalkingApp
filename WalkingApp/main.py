@@ -212,6 +212,20 @@ def main(page: ft.Page):
         rows=[]
     )
 
+    new_record_button = ft.FilledButton(text="Přidej nový záznam",
+                                        on_click=lambda _: page.go("/new"))
+
+    exit_button = ft.ElevatedButton(text="Konec",
+                                    style=ft.ButtonStyle(
+                                        shape=ft.ContinuousRectangleBorder(radius=30)),
+                                    on_click=window_event)
+
+    save_button = ft.ElevatedButton(text="Uložit",
+                                    on_click=save_clicked)
+
+    show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
+                                               on_click=open_statistics)
+
     fill_recent_walks_table()
     page.overlay.append(date_picker)
 
@@ -256,8 +270,7 @@ def main(page: ft.Page):
                                      top=420,
                                      width=200,
                                      height=30,
-                                     content=ft.FilledButton("Přidej nový záznam", on_click=lambda _: page.go
-                                     ("/new"))),
+                                     content=new_record_button),
                         ft.Container(right=90,
                                      bottom=195,
                                      width=200,
@@ -267,10 +280,7 @@ def main(page: ft.Page):
                                      bottom=80,
                                      width=100,
                                      height=25,
-                                     content=ft.ElevatedButton("Konec",
-                                                               style=ft.ButtonStyle(
-                                                                   shape=ft.ContinuousRectangleBorder(radius=30)),
-                                                               on_click=window_event)),
+                                     content=exit_button),
                     ],
                     width=page.window_width,
                     height=page.window_height)],
@@ -307,19 +317,16 @@ def main(page: ft.Page):
                                          top=110,
                                          left=200,
                                          bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=ft.ElevatedButton(text="Uložit", on_click=save_clicked),
+                            ft.Container(content=save_button,
                                          top=200,
                                          left=20),
-                            ft.Container(content=ft.ElevatedButton("Ukaž statistiky", on_click=open_statistics),
+                            ft.Container(content=show_statistics_button,
                                          left=20,
                                          top=250),
                             ft.Container(content=data_table,
                                          left=70,
                                          top=350),
-                            ft.Container(content=ft.ElevatedButton("Konec",
-                                                                   style=ft.ButtonStyle(
-                                                                       shape=ft.ContinuousRectangleBorder(radius=30)),
-                                                                   on_click=window_event),
+                            ft.Container(content=exit_button,
                                          right=5,
                                          bottom=80,
                                          width=100,
@@ -387,10 +394,7 @@ def main(page: ft.Page):
                                          height=100,
                                          left=100,
                                          top=410),
-                            ft.Container(content=ft.ElevatedButton("Konec",
-                                                                   style=ft.ButtonStyle(
-                                                                       shape=ft.ContinuousRectangleBorder(radius=30)),
-                                                                   on_click=window_event),
+                            ft.Container(content=exit_button,
                                          right=5,
                                          bottom=80,
                                          width=100,
