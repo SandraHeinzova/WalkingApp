@@ -10,7 +10,7 @@ Please feel free to contact me for any tips!
 <h2 align="center">How to run the App </h2>
 
 <ul>
-  <li>Get your copy of the main.py and walking_data.xlsx (or empty new_template.xlsx) files and make sure, you have all required libraries.</li>
+  <li>Get your copy of the WalkingApp folder with all files and make sure, you have all required libraries.</li>
   <li>Open the main.py on your PyCharm, VS Code etc. and hit run.</li>
   <li>Flet enables to develop mobile apps as well. If you want to test this app on your mobile phone 
       just follow <a href="https://flet.dev/docs/guides/python/testing-on-android">Flet Guide</a>. For now available for Android.  </li>
