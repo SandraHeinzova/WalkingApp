@@ -134,8 +134,8 @@ def main(page: ft.Page):
             return
 
         if not date_picker.value:
-            dialogs.show_no_date_picked_dialog(page)
             page.go("/")
+            dialogs.show_no_date_picked_dialog(page)
             return
 
         date = date_picker.value.strftime("%d/%m/%y")
