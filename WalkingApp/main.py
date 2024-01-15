@@ -4,6 +4,7 @@ import re
 import dialogs
 import excel_func
 import statistics
+import new
 
 pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
@@ -155,7 +156,6 @@ def main(page: ft.Page):
 
     show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                                on_click=open_statistics)
-
     fill_recent_walks_table()
     page.overlay.append(date_picker)
 
@@ -217,56 +217,7 @@ def main(page: ft.Page):
             )
         )
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(
-                ft.View(
-                    route="/new",
-                    bgcolor=ft.colors.BLUE_100,
-                    padding=0,
-                    appbar=ft.AppBar(title=ft.Text("Nový záznam"),
-                                     bgcolor=ft.colors.BLUE_100),
-                    controls=[
-                        ft.Stack(controls=[
-                            ft.Image(
-                                src="https://picsum.photos/id/651/400/800",
-                                width=page.window_width,
-                                height=page.window_height,
-                                fit=ft.ImageFit.FILL),
-                            ft.Container(content=walked_kms_entry,
-                                         top=30,
-                                         left=25,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_time_entry,
-                                         top=30,
-                                         left=200,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_kcal_entry,
-                                         top=110,
-                                         left=25,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_steps_entry,
-                                         top=110,
-                                         left=200,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=save_button,
-                                         top=200,
-                                         left=20),
-                            ft.Container(content=show_statistics_button,
-                                         left=20,
-                                         top=250),
-                            ft.Container(content=data_table,
-                                         left=70,
-                                         top=350),
-                            ft.Container(content=exit_button,
-                                         right=5,
-                                         bottom=80,
-                                         width=100,
-                                         height=25),
-
-                        ],
-                            width=page.window_width,
-                            height=page.window_height - 70)]
-                )
-            )
+            page.views.append(new.route_new(page, save_clicked, open_statistics, window_event))
 
         if page.route == "/statistics":
             page.views.append(statistics.route_statistics(page, window_event))

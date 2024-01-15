@@ -3,7 +3,7 @@ import excel_func
 import controls
 
 
-def route_statistics(page, func):
+def route_statistics(page, func_exit):
     total_km, total_time, total_kcal, total_steps = excel_func.statistics()
     view_statistics = ft.View(
                         "/statistics",
@@ -58,7 +58,7 @@ def route_statistics(page, func):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=controls.exit_button_create(func),
+                                ft.Container(content=controls.exit_button_create(func_exit),
                                              right=5,
                                              bottom=80,
                                              width=100,
