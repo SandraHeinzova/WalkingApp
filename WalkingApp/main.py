@@ -3,8 +3,9 @@ from datetime import datetime
 import re
 import dialogs
 import excel_func
-import statistics
-import new
+import statistics_r
+import new_r
+import controls
 
 pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
@@ -31,15 +32,6 @@ def main(page: ft.Page):
     def open_statistics(_):
         page.go("/statistics")
 
-    def fill_recent_walks_table():
-        walks_data = excel_func.get_recent_walks()
-        recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
-        data_table.rows = [
-            ft.DataRow(
-                [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
-            ) for date, kms in recent_walks]
-        page.update()
-
     def pick_date(_):
         picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
         page.update()
@@ -59,8 +51,8 @@ def main(page: ft.Page):
             return None
 
     def save_clicked(_):
-        if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
-                    walked_steps_entry.value]):
+        if not all([controls.walked_time_entry.value, controls.walked_kms_entry.value, controls.walked_kcal_entry.value,
+                    controls.walked_steps_entry.value]):
             dialogs.show_incomplete_dialog(page)
             return
 
@@ -70,22 +62,22 @@ def main(page: ft.Page):
             return
 
         date = date_picker.value.strftime("%d/%m/%y")
-        kms = float(walked_kms_entry.value)
-        time = save_time_entry(walked_time_entry.value)
-        kcal = int(walked_kcal_entry.value)
-        steps = int(walked_steps_entry.value)
+        kms = float(controls.walked_kms_entry.value)
+        time = save_time_entry(controls.walked_time_entry.value)
+        kcal = int(controls.walked_kcal_entry.value)
+        steps = int(controls.walked_steps_entry.value)
 
         if time is None:
             return
 
         excel_func.save_to_excel(date, kms, time, kcal, steps)
 
-        dialogs.show_success_dialogue(page, fill_recent_walks_table)
+        dialogs.show_success_dialogue(page, controls.fill_recent_walks_table)
 
-        walked_kms_entry.value = ""
-        walked_time_entry.value = ""
-        walked_kcal_entry.value = ""
-        walked_steps_entry.value = ""
+        controls.walked_kms_entry.value = ""
+        controls.walked_time_entry.value = ""
+        controls.walked_kcal_entry.value = ""
+        controls.walked_steps_entry.value = ""
         page.update()
 
     # CONTROLS OF THE APP - BUTTONS, TEXTS
@@ -95,31 +87,7 @@ def main(page: ft.Page):
                           style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                           text_align=ft.TextAlign.CENTER)
 
-    walked_kms_entry = ft.TextField(label="Kolik jsi ušel?",
-                                    hint_text="km.m",
-                                    width=160,
-                                    border_radius=0,
-                                    input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9.]",
-                                                                replacement_string=""),
-                                    keyboard_type=ft.KeyboardType.NUMBER)
-    walked_time_entry = ft.TextField(label="Za jak dlouho?",
-                                     hint_text="hodiny:minuty",
-                                     width=160,
-                                     border_radius=0,
-                                     input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9:]",
-                                                                 replacement_string=""))
-    walked_kcal_entry = ft.TextField(label="Kolik kalorií?",
-                                     width=160,
-                                     border_radius=0,
-                                     input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9]",
-                                                                 replacement_string=""),
-                                     keyboard_type=ft.KeyboardType.NUMBER)
-    walked_steps_entry = ft.TextField(label="A kolik kroků?",
-                                      width=160,
-                                      border_radius=0,
-                                      input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9]",
-                                                                  replacement_string=""),
-                                      keyboard_type=ft.KeyboardType.NUMBER)
+
 
     date_picker = ft.DatePicker(on_change=pick_date,
                                 first_date=datetime(2023, 10, 1),
@@ -134,15 +102,6 @@ def main(page: ft.Page):
                           text_align=ft.TextAlign.CENTER,
                           color=ft.colors.WHITE54)
 
-    data_table = ft.DataTable(
-        bgcolor=ft.colors.WHITE54,
-        columns=[
-            ft.DataColumn(ft.Text("Datum")),
-            ft.DataColumn(ft.Text("Kilometry")),
-        ],
-        rows=[]
-    )
-
     new_record_button = ft.FilledButton(text="Přidej nový záznam",
                                         on_click=lambda _: page.go("/new"))
 
@@ -151,12 +110,6 @@ def main(page: ft.Page):
                                         shape=ft.ContinuousRectangleBorder(radius=30)),
                                     on_click=window_event)
 
-    save_button = ft.ElevatedButton(text="Uložit",
-                                    on_click=save_clicked)
-
-    show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                               on_click=open_statistics)
-    fill_recent_walks_table()
     page.overlay.append(date_picker)
 
     open_maps = ft.Chip(
@@ -166,6 +119,7 @@ def main(page: ft.Page):
     )
 
     # GUI OF THE APP
+    controls.fill_recent_walks_table(page)
 
     def views(_):
         page.views.clear()
@@ -217,10 +171,10 @@ def main(page: ft.Page):
             )
         )
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new.route_new(page, save_clicked, open_statistics, window_event))
+            page.views.append(new_r.route_new(page, save_clicked, open_statistics, window_event))
 
         if page.route == "/statistics":
-            page.views.append(statistics.route_statistics(page, window_event))
+            page.views.append(statistics_r.route_statistics(page, window_event))
         page.update()
 
     def view_pop(_):
