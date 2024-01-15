@@ -1,14 +1,10 @@
 import flet as ft
-import re
 import dialogs
 import excel_func
 import statistics_r
 import new_r
 import controls
 import home_r
-
-pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
-pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
 # MAIN BODY OF THE APP WRAP IN FUNCTION MAIN
@@ -29,20 +25,6 @@ def main(page: ft.Page):
     page.window_prevent_close = True
     page.on_window_event = window_event
 
-    def open_statistics(_):
-        page.go("/statistics")
-
-    def save_time_entry(walked_time_entry_value):
-        if re.search(pattern_hours_minutes, walked_time_entry_value):
-            time_format_to_save = f"{walked_time_entry_value}:00"
-            return time_format_to_save
-        elif re.search(pattern_hours, walked_time_entry_value):
-            time_format_to_save = f"{walked_time_entry_value}:00:00"
-            return time_format_to_save
-        else:
-            dialogs.show_wrong_time_dialog(page)
-            return None
-
     def save_clicked(_):
         if not all([new_r.walked_time_entry.value, new_r.walked_kms_entry.value, new_r.walked_kcal_entry.value,
                     new_r.walked_steps_entry.value]):
@@ -56,7 +38,7 @@ def main(page: ft.Page):
 
         date = home_r.date_picker.value.strftime("%d/%m/%y")
         kms = float(new_r.walked_kms_entry.value)
-        time = save_time_entry(new_r.walked_time_entry.value)
+        time = controls.save_time_entry(page, new_r.walked_time_entry.value)
         kcal = int(new_r.walked_kcal_entry.value)
         steps = int(new_r.walked_steps_entry.value)
 
@@ -80,7 +62,7 @@ def main(page: ft.Page):
         page.views.clear()
         page.views.append(home_r.route_home(page, window_event))
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new_r.route_new(page, save_clicked, open_statistics, window_event))
+            page.views.append(new_r.route_new(page, save_clicked, controls.open_statistics, window_event))
         if page.route == "/statistics":
             page.views.append(statistics_r.route_statistics(page, window_event))
         page.update()
