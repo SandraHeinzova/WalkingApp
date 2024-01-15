@@ -63,10 +63,10 @@ def show_wrong_time_dialog(page):
     page.update()
 
 
-def show_success_dialogue(page, fill_func):
+def show_success_dialogue(page, fill_func, table):
     def success(_):
         success_dialog.open = False
-        fill_func(page)
+        fill_func(page, table)
         page.update()
 
     success_dialog = ft.AlertDialog(
