@@ -38,7 +38,7 @@ def main(page: ft.Page):
 
         date = home_r.date_picker.value.strftime("%d/%m/%y")
         kms = float(new_r.walked_kms_entry.value)
-        time = controls.save_time_entry(page, new_r.walked_time_entry.value)
+        time = new_r.save_time_entry(page, new_r.walked_time_entry.value)
         kcal = int(new_r.walked_kcal_entry.value)
         steps = int(new_r.walked_steps_entry.value)
 

@@ -1,5 +1,10 @@
 import flet as ft
+import re
 import controls
+import dialogs
+
+pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
+pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
 def open_statistics(e):
@@ -16,6 +21,18 @@ def show_stat_button_create():
     show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                                on_click=open_statistics)
     return show_statistics_button
+
+
+def save_time_entry(page, walked_time_entry_value):
+    if re.search(pattern_hours_minutes, walked_time_entry_value):
+        time_format_to_save = f"{walked_time_entry_value}:00"
+        return time_format_to_save
+    elif re.search(pattern_hours, walked_time_entry_value):
+        time_format_to_save = f"{walked_time_entry_value}:00:00"
+        return time_format_to_save
+    else:
+        dialogs.show_wrong_time_dialog(page)
+        return None
 
 
 data_table = ft.DataTable(
