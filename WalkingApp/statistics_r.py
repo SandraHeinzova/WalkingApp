@@ -1,6 +1,6 @@
 import flet as ft
 import excel_func
-import controls
+import home_r
 
 
 def route_statistics(page, func_exit):
@@ -58,7 +58,7 @@ def route_statistics(page, func_exit):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=controls.exit_button_create(func_exit),
+                                ft.Container(content=home_r.exit_button_create(func_exit),
                                              right=5,
                                              bottom=80,
                                              width=100,

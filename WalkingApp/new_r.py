@@ -1,7 +1,6 @@
 import flet as ft
 import re
 import home_r
-import controls
 import dialogs
 import excel_func
 
@@ -47,7 +46,7 @@ def save_clicked(e, page):
 
     excel_func.save_to_excel(date, kms, time, kcal, steps)
 
-    dialogs.show_success_dialogue(page, controls.fill_recent_walks_table, data_table)
+    dialogs.show_success_dialogue(page, fill_recent_walks_table, data_table)
 
     walked_kms_entry.value = ""
     walked_time_entry.value = ""
@@ -64,6 +63,17 @@ def save_button_create(e, page):
 
 show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                            on_click=open_statistics)
+
+
+def fill_recent_walks_table(page, table):
+    walks_data = excel_func.get_recent_walks()
+    recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
+    table.rows = [
+        ft.DataRow(
+            [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
+        ) for date, kms in recent_walks]
+    page.update()
+
 
 data_table = ft.DataTable(
     bgcolor=ft.colors.WHITE54,
@@ -142,7 +152,7 @@ def route_new(page, func_exit):
                 ft.Container(content=data_table,
                              left=70,
                              top=350),
-                ft.Container(content=controls.exit_button_create(func_exit),
+                ft.Container(content=home_r.exit_button_create(func_exit),
                              right=5,
                              bottom=80,
                              width=100,

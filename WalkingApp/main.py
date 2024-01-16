@@ -2,7 +2,6 @@ import flet as ft
 import dialogs
 import statistics_r
 import new_r
-import controls
 import home_r
 
 
@@ -24,7 +23,7 @@ def main(page: ft.Page):
     page.window_prevent_close = True
     page.on_window_event = window_event
 
-    controls.fill_recent_walks_table(page, new_r.data_table)
+    new_r.fill_recent_walks_table(page, new_r.data_table)
     page.overlay.append(home_r.date_picker)
 
     def views(_):
