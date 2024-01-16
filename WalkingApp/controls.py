@@ -1,8 +1,5 @@
 import flet as ft
 import excel_func
-import re
-import dialogs
-
 
 
 def fill_recent_walks_table(page, table):

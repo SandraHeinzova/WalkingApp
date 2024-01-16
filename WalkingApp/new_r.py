@@ -1,7 +1,9 @@
 import flet as ft
 import re
+import home_r
 import controls
 import dialogs
+import excel_func
 
 pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
@@ -9,18 +11,6 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 def open_statistics(e):
     e.page.go("/statistics")
-
-
-def save_button_create(func_save):
-    save_button = ft.ElevatedButton(text="Uložit",
-                                    on_click=func_save)
-    return save_button
-
-
-def show_stat_button_create():
-    show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                               on_click=open_statistics)
-    return show_statistics_button
 
 
 def save_time_entry(page, walked_time_entry_value):
@@ -34,6 +24,46 @@ def save_time_entry(page, walked_time_entry_value):
         dialogs.show_wrong_time_dialog(page)
         return None
 
+
+def save_clicked(e, page):
+    if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
+                walked_steps_entry.value]):
+        dialogs.show_incomplete_dialog(page)
+        return
+
+    if not home_r.date_picker.value:
+        e.page.go("/")
+        dialogs.show_no_date_picked_dialog(page)
+        return
+
+    date = home_r.date_picker.value.strftime("%d/%m/%y")
+    kms = float(walked_kms_entry.value)
+    time = save_time_entry(page, walked_time_entry.value)
+    kcal = int(walked_kcal_entry.value)
+    steps = int(walked_steps_entry.value)
+
+    if time is None:
+        return
+
+    excel_func.save_to_excel(date, kms, time, kcal, steps)
+
+    dialogs.show_success_dialogue(page, controls.fill_recent_walks_table, data_table)
+
+    walked_kms_entry.value = ""
+    walked_time_entry.value = ""
+    walked_kcal_entry.value = ""
+    walked_steps_entry.value = ""
+    page.update()
+
+
+def save_button_create(e, page):
+    save_button = ft.ElevatedButton(text="Uložit",
+                                    on_click=lambda _: save_clicked(e, page))
+    return save_button
+
+
+show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
+                                           on_click=open_statistics)
 
 data_table = ft.DataTable(
     bgcolor=ft.colors.WHITE54,
@@ -73,53 +103,53 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   keyboard_type=ft.KeyboardType.NUMBER)
 
 
-def route_new(page, func_save, func_exit):
+def route_new(page, func_exit):
     view_new = ft.View(
-                    route="/new",
-                    bgcolor=ft.colors.BLUE_100,
-                    padding=0,
-                    appbar=ft.AppBar(title=ft.Text("Nový záznam"),
-                                     bgcolor=ft.colors.BLUE_100),
-                    controls=[
-                        ft.Stack(controls=[
-                            ft.Image(
-                                src="https://picsum.photos/id/651/400/800",
-                                width=page.window_width,
-                                height=page.window_height,
-                                fit=ft.ImageFit.FILL),
-                            ft.Container(content=walked_kms_entry,
-                                         top=30,
-                                         left=25,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_time_entry,
-                                         top=30,
-                                         left=200,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_kcal_entry,
-                                         top=110,
-                                         left=25,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=walked_steps_entry,
-                                         top=110,
-                                         left=200,
-                                         bgcolor=ft.colors.BLUE_50),
-                            ft.Container(content=save_button_create(func_save),
-                                         top=200,
-                                         left=20),
-                            ft.Container(content=show_stat_button_create(),
-                                         left=20,
-                                         top=250),
-                            ft.Container(content=data_table,
-                                         left=70,
-                                         top=350),
-                            ft.Container(content=controls.exit_button_create(func_exit),
-                                         right=5,
-                                         bottom=80,
-                                         width=100,
-                                         height=25)
-                        ],
-                            width=page.window_width,
-                            height=page.window_height - 70)]
-                )
+        route="/new",
+        bgcolor=ft.colors.BLUE_100,
+        padding=0,
+        appbar=ft.AppBar(title=ft.Text("Nový záznam"),
+                         bgcolor=ft.colors.BLUE_100),
+        controls=[
+            ft.Stack(controls=[
+                ft.Image(
+                    src="https://picsum.photos/id/651/400/800",
+                    width=page.window_width,
+                    height=page.window_height,
+                    fit=ft.ImageFit.FILL),
+                ft.Container(content=walked_kms_entry,
+                             top=30,
+                             left=25,
+                             bgcolor=ft.colors.BLUE_50),
+                ft.Container(content=walked_time_entry,
+                             top=30,
+                             left=200,
+                             bgcolor=ft.colors.BLUE_50),
+                ft.Container(content=walked_kcal_entry,
+                             top=110,
+                             left=25,
+                             bgcolor=ft.colors.BLUE_50),
+                ft.Container(content=walked_steps_entry,
+                             top=110,
+                             left=200,
+                             bgcolor=ft.colors.BLUE_50),
+                ft.Container(content=save_button_create("e", page),
+                             top=200,
+                             left=20),
+                ft.Container(content=show_statistics_button,
+                             left=20,
+                             top=250),
+                ft.Container(content=data_table,
+                             left=70,
+                             top=350),
+                ft.Container(content=controls.exit_button_create(func_exit),
+                             right=5,
+                             bottom=80,
+                             width=100,
+                             height=25)
+            ],
+                width=page.window_width,
+                height=page.window_height - 70)]
+    )
 
     return view_new
