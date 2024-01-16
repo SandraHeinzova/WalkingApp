@@ -2,6 +2,7 @@ import openpyxl
 from datetime import datetime, timedelta
 
 
+# function that opens the Excel file, data according to whether data_only are needed
 def open_excel(data):
     try:
         file = "walking_data.xlsx"
@@ -13,6 +14,7 @@ def open_excel(data):
         return load_file
 
 
+# function that gets four last walks from Excel and return them
 def get_recent_walks():
     wb = open_excel(True)
     ws = wb["Sheet1"]
@@ -29,6 +31,7 @@ def get_recent_walks():
     return data
 
 
+# function that gets checked data and save them into Excel file
 def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     wb = open_excel(False)
     ws = wb["Sheet1"]
@@ -44,6 +47,7 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     wb.close()
 
 
+# function that gets from Excel file statistics and returns them
 def statistics():
     workbook = open_excel(True)
     worksheet = workbook["Sheet1"]

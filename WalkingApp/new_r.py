@@ -8,10 +8,12 @@ pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
+# function that redirects to the statistics page
 def open_statistics(e):
     e.page.go("/statistics")
 
 
+# checking format of the entered time and returning time suitable for Excel
 def save_time_entry(page, walked_time_entry_value):
     if re.search(pattern_hours_minutes, walked_time_entry_value):
         time_format_to_save = f"{walked_time_entry_value}:00"
@@ -24,6 +26,9 @@ def save_time_entry(page, walked_time_entry_value):
         return None
 
 
+# function that starts after the save button is clicked
+# it checks if all data are entered, transfers them into required formats and saves into Excel
+# the fields are cleared
 def save_clicked(e, page):
     if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                 walked_steps_entry.value]):
@@ -55,16 +60,19 @@ def save_clicked(e, page):
     page.update()
 
 
+# creating of saving button with on_click parameter and its function
 def save_button_create(e, page):
     save_button = ft.ElevatedButton(text="Uložit",
                                     on_click=lambda _: save_clicked(e, page))
     return save_button
 
 
+# button for open the statistics page, on_click parameter with corresponding function
 show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                            on_click=open_statistics)
 
 
+# function that gets data from Excel, goes through them and fills data rows with date and kms values
 def fill_recent_walks_table(page, table):
     walks_data = excel_func.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
@@ -75,6 +83,7 @@ def fill_recent_walks_table(page, table):
     page.update()
 
 
+# data table that holds data from last four walks
 data_table = ft.DataTable(
     bgcolor=ft.colors.WHITE54,
     columns=[
@@ -83,6 +92,7 @@ data_table = ft.DataTable(
     ],
     rows=[])
 
+# field for walked kilometres
 walked_kms_entry = ft.TextField(label="Kolik jsi ušel?",
                                 hint_text="km.m",
                                 width=160,
@@ -91,6 +101,7 @@ walked_kms_entry = ft.TextField(label="Kolik jsi ušel?",
                                                             replacement_string=""),
                                 keyboard_type=ft.KeyboardType.NUMBER)
 
+# field for time spent on walk
 walked_time_entry = ft.TextField(label="Za jak dlouho?",
                                  hint_text="hodiny:minuty",
                                  width=160,
@@ -98,13 +109,14 @@ walked_time_entry = ft.TextField(label="Za jak dlouho?",
                                  input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9:]",
                                                              replacement_string=""))
 
+# field for kcal burned on walk (according smartwatches etc.)
 walked_kcal_entry = ft.TextField(label="Kolik kalorií?",
                                  width=160,
                                  border_radius=0,
                                  input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9]",
                                                              replacement_string=""),
                                  keyboard_type=ft.KeyboardType.NUMBER)
-
+# field for number of steps made on walk (according smartwatches etc.)
 walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   width=160,
                                   border_radius=0,
@@ -113,6 +125,7 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   keyboard_type=ft.KeyboardType.NUMBER)
 
 
+# ROUTE TO "/NEW" PAGE
 def route_new(page, func_exit):
     view_new = ft.View(
         route="/new",

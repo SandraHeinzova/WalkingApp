@@ -1,6 +1,7 @@
 import flet as ft
 
 
+# every control that belongs to the confirm dialog - when user wants to exit application
 def show_confirm_dialog(page):
     def yes_click(_):
         page.window_destroy()
@@ -25,6 +26,8 @@ def show_confirm_dialog(page):
     page.update()
 
 
+# every control that belongs to the incomplete dialog - when user forget to fill one of the
+# text fields
 def show_incomplete_dialog(page):
     def return_back(_):
         incomplete_dialog.open = False
@@ -44,6 +47,7 @@ def show_incomplete_dialog(page):
     page.update()
 
 
+# every control that belongs to the wrong time dialog - when user fill in wrong format of the time
 def show_wrong_time_dialog(page):
     def fix_time(_):
         wrong_time_dialog.open = False
@@ -63,6 +67,8 @@ def show_wrong_time_dialog(page):
     page.update()
 
 
+# every control that belongs to the success dialog - when user fill in everything correctly
+# and application successfully saved it to the Excel
 def show_success_dialogue(page, fill_func, table):
     def success(_):
         success_dialog.open = False
@@ -83,6 +89,7 @@ def show_success_dialogue(page, fill_func, table):
     page.update()
 
 
+# every control that belongs to the no date picked dialog - when user forgets to pick a date
 def show_no_date_picked_dialog(page):
     def go_pick_date(_):
         no_date_picked_dialog.open = False

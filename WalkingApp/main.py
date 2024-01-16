@@ -5,7 +5,7 @@ import new_r
 import home_r
 
 
-# MAIN BODY OF THE APP WRAP IN FUNCTION MAIN
+# the applications entry point
 def main(page: ft.Page):
     page.title = "WalkingApp"
     page.padding = 0
@@ -16,6 +16,8 @@ def main(page: ft.Page):
     page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
 
+    # function that is called, when user has clicked on
+    # exit button or red cross in top left corner of window
     def window_event(e):
         if e.data == "close" or e.name == "click":
             dialogs.show_confirm_dialog(page)
@@ -23,9 +25,12 @@ def main(page: ft.Page):
     page.window_prevent_close = True
     page.on_window_event = window_event
 
+    # filling the data table with data from last four walks
     new_r.fill_recent_walks_table(page, new_r.data_table)
+    # adding date picker to the application
     page.overlay.append(home_r.date_picker)
 
+    # routing
     def views(_):
         page.views.clear()
         page.views.append(home_r.route_home(page, window_event))
@@ -46,5 +51,4 @@ def main(page: ft.Page):
 
 
 # START OF THE APP
-
 ft.app(target=main)

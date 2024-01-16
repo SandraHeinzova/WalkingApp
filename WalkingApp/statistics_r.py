@@ -3,6 +3,7 @@ import excel_func
 import home_r
 
 
+# ROUTE TO "/STATISTICS" PAGE
 def route_statistics(page, func_exit):
     total_km, total_time, total_kcal, total_steps = excel_func.statistics()
     view_statistics = ft.View(
