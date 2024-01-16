@@ -2,15 +2,19 @@ import flet as ft
 import controls
 
 
+def open_statistics(e):
+    e.page.go("/statistics")
+
+
 def save_button_create(func_save):
     save_button = ft.ElevatedButton(text="Uložit",
                                     on_click=func_save)
     return save_button
 
 
-def show_stat_button_create(func_stat):
+def show_stat_button_create():
     show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                               on_click=func_stat)
+                                               on_click=open_statistics)
     return show_statistics_button
 
 
@@ -52,7 +56,7 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   keyboard_type=ft.KeyboardType.NUMBER)
 
 
-def route_new(page, func_save, func_stat, func_exit):
+def route_new(page, func_save, func_exit):
     view_new = ft.View(
                     route="/new",
                     bgcolor=ft.colors.BLUE_100,
@@ -85,7 +89,7 @@ def route_new(page, func_save, func_stat, func_exit):
                             ft.Container(content=save_button_create(func_save),
                                          top=200,
                                          left=20),
-                            ft.Container(content=show_stat_button_create(func_stat),
+                            ft.Container(content=show_stat_button_create(),
                                          left=20,
                                          top=250),
                             ft.Container(content=data_table,

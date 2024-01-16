@@ -25,10 +25,6 @@ def exit_button_create(func_exit):
     return exit_button
 
 
-def open_statistics(e):
-    e.page.go("/statistics")
-
-
 def save_time_entry(page, walked_time_entry_value):
     if re.search(pattern_hours_minutes, walked_time_entry_value):
         time_format_to_save = f"{walked_time_entry_value}:00"

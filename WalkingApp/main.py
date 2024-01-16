@@ -62,7 +62,7 @@ def main(page: ft.Page):
         page.views.clear()
         page.views.append(home_r.route_home(page, window_event))
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new_r.route_new(page, save_clicked, controls.open_statistics, window_event))
+            page.views.append(new_r.route_new(page, save_clicked, window_event))
         if page.route == "/statistics":
             page.views.append(statistics_r.route_statistics(page, window_event))
         page.update()
