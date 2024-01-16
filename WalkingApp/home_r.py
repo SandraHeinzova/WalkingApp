@@ -1,5 +1,4 @@
 import flet as ft
-import controls
 from datetime import datetime
 
 welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
@@ -30,6 +29,14 @@ def new_record_button_create(page):
     new_record_button = ft.FilledButton(text="Přidej nový záznam",
                                         on_click=lambda _: page.go("/new"))
     return new_record_button
+
+
+def exit_button_create(func_exit):
+    exit_button = ft.ElevatedButton(text="Konec",
+                                    style=ft.ButtonStyle(
+                                        shape=ft.ContinuousRectangleBorder(radius=30)),
+                                    on_click=func_exit)
+    return exit_button
 
 
 def open_czech_maps(e):
@@ -84,7 +91,7 @@ def route_home(page, func_exit):
                                      bottom=80,
                                      width=100,
                                      height=25,
-                                     content=controls.exit_button_create(func_exit)),
+                                     content=exit_button_create(func_exit)),
                     ],
                     width=page.window_width,
                     height=page.window_height)],
