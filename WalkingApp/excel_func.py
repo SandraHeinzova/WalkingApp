@@ -31,8 +31,13 @@ def get_recent_walks():
     return data
 
 
-# function that gets checked data and save them into Excel file
 def save_to_excel(date, kms: float, time, kcal: int, steps: int):
+    """gets checked data as params and save them into Excel file
+    :param date: date value in required format
+    :param kms: kilometres, float value
+    :param time: time value in required format
+    :param kcal: amount of kcal, int value
+    :param steps: amount of steps, int value"""
     wb = open_excel(False)
     ws = wb["Sheet1"]
 
@@ -47,8 +52,8 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     wb.close()
 
 
-# function that gets from Excel file statistics and returns them
 def statistics():
+    """receives from Excel file data, calculates statistics and returns them"""
     workbook = open_excel(True)
     worksheet = workbook["Sheet1"]
 

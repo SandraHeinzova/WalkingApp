@@ -5,8 +5,8 @@ import new_r
 import home_r
 
 
-# the applications entry point
 def main(page: ft.Page):
+    """the applications entry point"""
     page.title = "WalkingApp"
     page.padding = 0
     page.window_width = 400
@@ -16,9 +16,9 @@ def main(page: ft.Page):
     page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
 
-    # function that is called, when user has clicked on
-    # exit button or red cross in top left corner of window
     def window_event(e):
+        """function that is called, when user has clicked on
+           exit button or red cross in top left corner of window"""
         if e.data == "close" or e.name == "click":
             dialogs.show_confirm_dialog(page)
 
@@ -30,8 +30,8 @@ def main(page: ft.Page):
     # adding date picker to the application
     page.overlay.append(home_r.date_picker)
 
-    # routing
     def views(_):
+        """routing"""
         page.views.clear()
         page.views.append(home_r.route_home(page, window_event))
         if page.route == "/new" or page.route == "/statistics":

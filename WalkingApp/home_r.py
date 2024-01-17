@@ -18,8 +18,9 @@ date_button = ft.ElevatedButton("Vyber datum",
                                 on_click=lambda _: date_picker.pick_date())
 
 
-# function that updates picked_date value
 def pick_date(e):
+    """updates picked_date value
+    :param e: event"""
     picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
     e.page.update()
 
@@ -30,15 +31,17 @@ date_picker = ft.DatePicker(on_change=pick_date,
                             last_date=datetime(2030, 12, 31))
 
 
-# creating of button that redirects to the page "/new", to add new record
 def new_record_button_create(page):
+    """creates a button that redirects to the page "/new", to add new record
+    :param page: container for controls in View"""
     new_record_button = ft.FilledButton(text="Přidej nový záznam",
                                         on_click=lambda _: page.go("/new"))
     return new_record_button
 
 
-# creating button that exits application
 def exit_button_create(func_exit):
+    """creates a button that exits application
+     :param func_exit: function that exits an app"""
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
                                         shape=ft.ContinuousRectangleBorder(radius=30)),
@@ -46,8 +49,9 @@ def exit_button_create(func_exit):
     return exit_button
 
 
-# function that opens maps - to check where is possible to go for a walk
 def open_czech_maps(e):
+    """opens maps - to check where is possible to go for a walk
+    :param e: event"""
     e.page.launch_url("https://mapy.cz/")
 
 
@@ -59,8 +63,10 @@ open_maps = ft.Chip(
 )
 
 
-# ROUTE TO "/" PAGE
 def route_home(page, func_exit):
+    """route to '/'
+    :param page: container for controls in View
+    :param func_exit: function for exiting an app"""
     view_home = ft.View(
                 "/",
                 bgcolor=ft.colors.BLUE_100,

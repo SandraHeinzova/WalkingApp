@@ -8,13 +8,15 @@ pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
-# function that redirects to the statistics page
 def open_statistics(e):
+    """Redirects to the statistics page"""
     e.page.go("/statistics")
 
 
-# checking format of the entered time and returning time suitable for Excel
 def save_time_entry(page, walked_time_entry_value):
+    """checks format of the entered time, returns time in format suitable for Excel
+    :param page: container for controls in View
+    :param walked_time_entry_value: value from walked_time_entry TextField"""
     if re.search(pattern_hours_minutes, walked_time_entry_value):
         time_format_to_save = f"{walked_time_entry_value}:00"
         return time_format_to_save
@@ -30,6 +32,10 @@ def save_time_entry(page, walked_time_entry_value):
 # it checks if all data are entered, transfers them into required formats and saves into Excel
 # the fields are cleared
 def save_clicked(e, page):
+    """starts after the save button is clicked, checks if all data are entered, transfers them into required formats
+     and saves into Excel and the fields are cleared
+     :param e: event
+     :param page: container for controls in View"""
     if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                 walked_steps_entry.value]):
         dialogs.show_incomplete_dialog(page)
@@ -60,8 +66,10 @@ def save_clicked(e, page):
     page.update()
 
 
-# creating of saving button with on_click parameter and its function
 def save_button_create(e, page):
+    """creates a saving button with on_click parameter and its function
+    :param e: event
+    :param page: container for controls in View"""
     save_button = ft.ElevatedButton(text="Uložit",
                                     on_click=lambda _: save_clicked(e, page))
     return save_button
@@ -72,8 +80,10 @@ show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                            on_click=open_statistics)
 
 
-# function that gets data from Excel, goes through them and fills data rows with date and kms values
 def fill_recent_walks_table(page, table):
+    """gets data from Excel, goes through them and fills data table rows with date and kms values
+    :param page: container for controls in View
+    :param table: data_table"""
     walks_data = excel_func.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
     table.rows = [
@@ -125,8 +135,10 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   keyboard_type=ft.KeyboardType.NUMBER)
 
 
-# ROUTE TO "/NEW" PAGE
 def route_new(page, func_exit):
+    """route to '/new'
+    :param page: container for controls in View
+    :param func_exit: function for exiting an app"""
     view_new = ft.View(
         route="/new",
         bgcolor=ft.colors.BLUE_100,
