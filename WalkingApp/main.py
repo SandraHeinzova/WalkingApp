@@ -28,7 +28,7 @@ def main(page: ft.Page):
     # filling the data table with data from last four walks
     new_r._fill_recent_walks_table(page, new_r._data_table)
     # adding date picker to the application
-    page.overlay.append(home_r.date_picker)
+    page.overlay.append(home_r._date_picker)
 
     def views(_):
         """routing"""
