@@ -20,7 +20,7 @@ def main(page: ft.Page):
         """function that is called, when user has clicked on
            exit button or red cross in top left corner of window"""
         if e.data == "close" or e.name == "click":
-            dialogs._show_confirm_dialog(page)
+            dialogs.show_confirm_dialog(page)
 
     page.window_prevent_close = True
     page.on_window_event = window_event
@@ -31,11 +31,11 @@ def main(page: ft.Page):
     def views(_):
         """routing"""
         page.views.clear()
-        page.views.append(home_r.route_home(page))
+        page.views.append(home_r.routing_to_home(page))
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new_r.route_new(page))
+            page.views.append(new_r.routing_to_new(page))
         if page.route == "/statistics":
-            page.views.append(statistics_r.route_statistics(page))
+            page.views.append(statistics_r.routing_to_statistics(page))
         page.update()
 
     def view_pop(_):

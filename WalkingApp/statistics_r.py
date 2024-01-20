@@ -18,7 +18,7 @@ def _exit_button_create():
 ###########
 #  Route  #
 ###########
-def route_statistics(page):
+def routing_to_statistics(page):
     """route to '/statistics'
     :param page: container for controls in View"""
     total_km, total_time, total_kcal, total_steps = model.calculate_statistics()

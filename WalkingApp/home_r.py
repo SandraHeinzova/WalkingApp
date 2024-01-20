@@ -74,7 +74,7 @@ _open_maps = ft.Chip(
 ###########
 #  Route  #
 ###########
-def route_home(page):
+def routing_to_home(page):
     """route to '/'
     :param page: container for controls in View"""
     view_home = ft.View(
