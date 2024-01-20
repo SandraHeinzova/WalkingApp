@@ -26,7 +26,7 @@ def main(page: ft.Page):
     page.on_window_event = window_event
 
     # filling the data table with data from last four walks
-    new_r.fill_recent_walks_table(page, new_r.data_table)
+    new_r._fill_recent_walks_table(page, new_r._data_table)
     # adding date picker to the application
     page.overlay.append(home_r.date_picker)
 
