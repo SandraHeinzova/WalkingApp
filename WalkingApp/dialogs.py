@@ -4,14 +4,14 @@ import flet as ft
 ##################
 # Event Handlers #
 ##################
-def show_confirm_dialog(page):
+def _show_confirm_dialog(page):
     """every control that belongs to the confirm dialog - when user wants to exit application
     :param page: container for controls in View"""
-    def yes_click(_):
+    def yes_clicked(_):
         """exits the app"""
         page.window_destroy()
 
-    def no_click(_):
+    def no_clicked(_):
         """goes back into the app"""
         confirm_dialog.open = False
         page.update()
@@ -21,8 +21,8 @@ def show_confirm_dialog(page):
         title=ft.Text("Potvrzení"),
         content=ft.Text("Opravdu si přeješ apku ukončit?"),
         actions=[
-            ft.ElevatedButton("Ano", on_click=yes_click),
-            ft.ElevatedButton("Ne", on_click=no_click),
+            ft.ElevatedButton("Ano", on_click=yes_clicked),
+            ft.ElevatedButton("Ne", on_click=no_clicked),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         open=True,
@@ -32,7 +32,7 @@ def show_confirm_dialog(page):
     page.update()
 
 
-def show_incomplete_dialog(page):
+def _show_incomplete_dialog(page):
     """every control that belongs to the incomplete dialog - when user forget to fill one of the
     text fields
     :param page: container for controls in View"""
@@ -55,10 +55,10 @@ def show_incomplete_dialog(page):
     page.update()
 
 
-def show_wrong_time_dialog(page):
+def _show_wrong_time_dialog(page):
     """every control that belongs to the wrong time dialog - when user fill in wrong format of the time
     :param page: container for controls in View"""
-    def fix_time(_):
+    def go_fix_time(_):
         """goes back into the app, so user can fill time in right format"""
         wrong_time_dialog.open = False
         page.update()
@@ -68,7 +68,7 @@ def show_wrong_time_dialog(page):
         title=ft.Text("Špatný formát času"),
         content=ft.Text("Zadej prosím celé hodiny, nebo hodiny a minuty."),
         actions=[
-            ft.ElevatedButton("OK", on_click=fix_time)
+            ft.ElevatedButton("OK", on_click=go_fix_time)
         ],
         open=True,
     )
@@ -77,13 +77,13 @@ def show_wrong_time_dialog(page):
     page.update()
 
 
-def show_success_dialogue(page, fill_func, table):
+def _show_success_dialogue(page, fill_func, table):
     """every control that belongs to the success dialog - when user fill in everything correctly
     and application successfully saved it to the Excel
     :param page: container for controls in View
     :param fill_func: function for filling the data table with updated data
     :param table: the data table to be filled"""
-    def success(_):
+    def update_table(_):
         """launches the fill_func and goes back to the app"""
         success_dialog.open = False
         fill_func(page, table)
@@ -94,7 +94,7 @@ def show_success_dialogue(page, fill_func, table):
         title=ft.Text("Úspěch"),
         content=ft.Text("Vše bylo úspěšně zapsáno"),
         actions=[
-            ft.ElevatedButton("OK", on_click=success)
+            ft.ElevatedButton("OK", on_click=update_table)
         ],
         open=True,
     )
@@ -103,7 +103,7 @@ def show_success_dialogue(page, fill_func, table):
     page.update()
 
 
-def show_no_date_picked_dialog(page):
+def _show_no_date_picked_dialog(page):
     """every control that belongs to the no date picked dialog - when user forgets to pick a date
     :param page: container for controls in View"""
     def go_pick_date(_):
