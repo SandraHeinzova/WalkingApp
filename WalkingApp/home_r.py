@@ -1,35 +1,16 @@
 import flet as ft
 from datetime import datetime
 
-# textfield that shows welcome text
-welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
-                      color=ft.colors.INDIGO,
-                      style=ft.TextThemeStyle.DISPLAY_MEDIUM,
-                      text_align=ft.TextAlign.CENTER)
 
-# textfield that shows which date hase user picked from date_picker, to check if it's correct
-picked_date = ft.Text(value="Vyber datum",
-                      text_align=ft.TextAlign.CENTER,
-                      color=ft.colors.WHITE54)
-
-# button that opens calendar to pick a date
-date_button = ft.ElevatedButton("Vyber datum",
-                                icon=ft.icons.CALENDAR_MONTH_ROUNDED,
-                                on_click=lambda _: date_picker.pick_date())
-
-
+##################
+# Event Handlers #
+##################
 def pick_date(e):
     """updates picked_date value
     :param e: event"""
     picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
     date_button.text = "{}".format(date_picker.value.strftime("%d/%m/%y"))
     e.page.update()
-
-
-# date picker control - calendar to choose date
-date_picker = ft.DatePicker(on_change=pick_date,
-                            first_date=datetime(2023, 10, 1),
-                            last_date=datetime(2030, 12, 31))
 
 
 def new_record_button_create(page):
@@ -56,6 +37,32 @@ def open_czech_maps(e):
     e.page.launch_url("https://mapy.cz/")
 
 
+###########
+#  View   #
+###########
+# textfield that shows welcome text
+welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
+                      color=ft.colors.INDIGO,
+                      style=ft.TextThemeStyle.DISPLAY_MEDIUM,
+                      text_align=ft.TextAlign.CENTER)
+
+# textfield that shows which date hase user picked from date_picker, to check if it's correct
+picked_date = ft.Text(value="Vyber datum",
+                      text_align=ft.TextAlign.CENTER,
+                      color=ft.colors.WHITE54)
+
+# button that opens calendar to pick a date
+date_button = ft.ElevatedButton("Vyber datum",
+                                icon=ft.icons.CALENDAR_MONTH_ROUNDED,
+                                on_click=lambda _: date_picker.pick_date())
+
+
+# date picker control - calendar to choose date
+date_picker = ft.DatePicker(on_change=pick_date,
+                            first_date=datetime(2023, 10, 1),
+                            last_date=datetime(2030, 12, 31))
+
+
 # control that activate open_czech_maps function
 open_maps = ft.Chip(
     label=ft.Text("Nápad na trasu"),
@@ -64,6 +71,9 @@ open_maps = ft.Chip(
 )
 
 
+###########
+#  Route  #
+###########
 def route_home(page, func_exit):
     """route to '/'
     :param page: container for controls in View

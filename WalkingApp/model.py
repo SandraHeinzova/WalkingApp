@@ -2,8 +2,12 @@ import openpyxl
 from datetime import datetime, timedelta
 
 
-# function that opens the Excel file, data according to whether data_only are needed
-def open_excel(data):
+##################
+# Event Handlers #
+##################
+def _open_excel(data):
+    """opens the Excel file
+    :param data: data according to whether data_only are needed"""
     try:
         file = "walking_data.xlsx"
         load_file = openpyxl.load_workbook(file, data_only=data)
@@ -14,9 +18,9 @@ def open_excel(data):
         return load_file
 
 
-# function that gets four last walks from Excel and return them
 def get_recent_walks():
-    wb = open_excel(True)
+    """gets four last walks from Excel and returns them"""
+    wb = _open_excel(True)
     ws = wb["Sheet1"]
 
     data = []
@@ -38,7 +42,7 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     :param time: time value in required format
     :param kcal: amount of kcal, int value
     :param steps: amount of steps, int value"""
-    wb = open_excel(False)
+    wb = _open_excel(False)
     ws = wb["Sheet1"]
 
     insert_into_excel = [date,
@@ -54,7 +58,7 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
 
 def statistics():
     """receives from Excel file data, calculates statistics and returns them"""
-    workbook = open_excel(True)
+    workbook = _open_excel(True)
     worksheet = workbook["Sheet1"]
 
     column_km = worksheet["B"]
@@ -79,3 +83,17 @@ def statistics():
 
     workbook.close()
     return total_km, total_time, total_kcal, total_steps
+
+
+def set_selected_date():
+    pass
+
+
+def get_selected_date():
+    pass
+
+
+###########
+#  View   #
+###########
+selected_date = None

@@ -2,6 +2,9 @@ import flet as ft
 import model
 
 
+##################
+# Event Handlers #
+##################
 def exit_button_create(func_exit):
     """creates a button that exits application
      :param func_exit: function that exits an app"""
@@ -12,6 +15,9 @@ def exit_button_create(func_exit):
     return exit_button
 
 
+###########
+#  Route  #
+###########
 def route_statistics(page, func_exit):
     """route to '/statistics'
     :param page: container for controls in View

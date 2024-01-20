@@ -1,6 +1,9 @@
 import flet as ft
 
 
+##################
+# Event Handlers #
+##################
 def show_confirm_dialog(page):
     """every control that belongs to the confirm dialog - when user wants to exit application
     :param page: container for controls in View"""

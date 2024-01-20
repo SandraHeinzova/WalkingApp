@@ -8,6 +8,9 @@ pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
+##################
+# Event Handlers #
+##################
 def exit_button_create(func_exit):
     """creates a button that exits application
      :param func_exit: function that exits an app"""
@@ -38,9 +41,6 @@ def save_time_entry(page, walked_time_entry_value):
         return None
 
 
-# function that starts after the save button is clicked
-# it checks if all data are entered, transfers them into required formats and saves into Excel
-# the fields are cleared
 def save_clicked(e, page):
     """starts after the save button is clicked, checks if all data are entered, transfers them into required formats
      and saves into Excel and the fields are cleared
@@ -85,11 +85,6 @@ def save_button_create(e, page):
     return save_button
 
 
-# button for open the statistics page, on_click parameter with corresponding function
-show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                           on_click=open_statistics)
-
-
 def fill_recent_walks_table(page, table):
     """gets data from Excel, goes through them and fills data table rows with date and kms values
     :param page: container for controls in View
@@ -102,6 +97,13 @@ def fill_recent_walks_table(page, table):
         ) for date, kms in recent_walks]
     page.update()
 
+
+###########
+#  View   #
+###########
+# button for open the statistics page, on_click parameter with corresponding function
+show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
+                                           on_click=open_statistics)
 
 # data table that holds data from last four walks
 data_table = ft.DataTable(
@@ -145,6 +147,9 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                   keyboard_type=ft.KeyboardType.NUMBER)
 
 
+###########
+#  Route  #
+###########
 def route_new(page, func_exit):
     """route to '/new'
     :param page: container for controls in View
