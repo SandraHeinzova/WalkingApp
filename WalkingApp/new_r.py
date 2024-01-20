@@ -1,6 +1,5 @@
 import flet as ft
 import re
-import home_r
 import dialogs
 import model
 
@@ -41,22 +40,21 @@ def save_time_entry(page, walked_time_entry_value):
         return None
 
 
-def save_clicked(e, page):
+def save_clicked(page):
     """starts after the save button is clicked, checks if all data are entered, transfers them into required formats
      and saves into Excel and the fields are cleared
-     :param e: event
      :param page: container for controls in View"""
     if not all([walked_time_entry.value, walked_kms_entry.value, walked_kcal_entry.value,
                 walked_steps_entry.value]):
         dialogs.show_incomplete_dialog(page)
         return
 
-    if not home_r.date_picker.value:
-        e.page.go("/")
+    if not model.selected_date:
+        page.go("/")
         dialogs.show_no_date_picked_dialog(page)
         return
 
-    date = home_r.date_picker.value.strftime("%d/%m/%y")
+    date = model.selected_date
     kms = float(walked_kms_entry.value)
     time = save_time_entry(page, walked_time_entry.value)
     kcal = int(walked_kcal_entry.value)
@@ -76,12 +74,11 @@ def save_clicked(e, page):
     page.update()
 
 
-def save_button_create(e, page):
+def save_button_create(page):
     """creates a saving button with on_click parameter and its function
-    :param e: event
     :param page: container for controls in View"""
     save_button = ft.ElevatedButton(text="Uložit",
-                                    on_click=lambda _: save_clicked(e, page))
+                                    on_click=lambda _: save_clicked(page))
     return save_button
 
 
@@ -183,7 +180,7 @@ def route_new(page, func_exit):
                              top=110,
                              left=200,
                              bgcolor=ft.colors.BLUE_50),
-                ft.Container(content=save_button_create("e", page),
+                ft.Container(content=save_button_create(page),
                              top=200,
                              left=20),
                 ft.Container(content=show_statistics_button,
