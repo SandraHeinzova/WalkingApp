@@ -2,7 +2,7 @@ import flet as ft
 import re
 import home_r
 import dialogs
-import excel_func
+import model
 
 pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
@@ -65,7 +65,7 @@ def save_clicked(e, page):
     if time is None:
         return
 
-    excel_func.save_to_excel(date, kms, time, kcal, steps)
+    model.save_to_excel(date, kms, time, kcal, steps)
 
     dialogs.show_success_dialogue(page, fill_recent_walks_table, data_table)
 
@@ -94,7 +94,7 @@ def fill_recent_walks_table(page, table):
     """gets data from Excel, goes through them and fills data table rows with date and kms values
     :param page: container for controls in View
     :param table: data_table"""
-    walks_data = excel_func.get_recent_walks()
+    walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
     table.rows = [
         ft.DataRow(

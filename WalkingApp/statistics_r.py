@@ -1,5 +1,5 @@
 import flet as ft
-import excel_func
+import model
 
 
 def exit_button_create(func_exit):
@@ -11,11 +11,12 @@ def exit_button_create(func_exit):
                                     on_click=func_exit)
     return exit_button
 
+
 def route_statistics(page, func_exit):
     """route to '/statistics'
     :param page: container for controls in View
     :param func_exit: function for exiting an app"""
-    total_km, total_time, total_kcal, total_steps = excel_func.statistics()
+    total_km, total_time, total_kcal, total_steps = model.statistics()
     view_statistics = ft.View(
                         "/statistics",
                         bgcolor=ft.colors.BLUE_100,
