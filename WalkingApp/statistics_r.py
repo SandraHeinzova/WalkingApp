@@ -6,7 +6,7 @@ import dialogs
 ##################
 # Event Handlers #
 ##################
-def exit_button_create():
+def _exit_button_create():
     """creates a button that exits application"""
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
@@ -75,7 +75,7 @@ def route_statistics(page):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=exit_button_create(),
+                                ft.Container(content=_exit_button_create(),
                                              right=5,
                                              bottom=80,
                                              width=100,
