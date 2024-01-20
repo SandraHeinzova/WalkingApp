@@ -10,13 +10,12 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 ##################
 # Event Handlers #
 ##################
-def exit_button_create(func_exit):
-    """creates a button that exits application
-     :param func_exit: function that exits an app"""
+def exit_button_create():
+    """creates a button that exits application"""
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
                                         shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=func_exit)
+                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
     return exit_button
 
 
@@ -147,10 +146,9 @@ walked_steps_entry = ft.TextField(label="A kolik kroků?",
 ###########
 #  Route  #
 ###########
-def route_new(page, func_exit):
+def route_new(page):
     """route to '/new'
-    :param page: container for controls in View
-    :param func_exit: function for exiting an app"""
+    :param page: container for controls in View"""
     view_new = ft.View(
         route="/new",
         bgcolor=ft.colors.BLUE_100,
@@ -189,7 +187,7 @@ def route_new(page, func_exit):
                 ft.Container(content=data_table,
                              left=70,
                              top=350),
-                ft.Container(content=exit_button_create(func_exit),
+                ft.Container(content=exit_button_create(),
                              right=5,
                              bottom=80,
                              width=100,

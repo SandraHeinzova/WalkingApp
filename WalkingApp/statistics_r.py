@@ -1,27 +1,26 @@
 import flet as ft
 import model
+import dialogs
 
 
 ##################
 # Event Handlers #
 ##################
-def exit_button_create(func_exit):
-    """creates a button that exits application
-     :param func_exit: function that exits an app"""
+def exit_button_create():
+    """creates a button that exits application"""
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
                                         shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=func_exit)
+                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
     return exit_button
 
 
 ###########
 #  Route  #
 ###########
-def route_statistics(page, func_exit):
+def route_statistics(page):
     """route to '/statistics'
-    :param page: container for controls in View
-    :param func_exit: function for exiting an app"""
+    :param page: container for controls in View"""
     total_km, total_time, total_kcal, total_steps = model.statistics()
     view_statistics = ft.View(
                         "/statistics",
@@ -76,7 +75,7 @@ def route_statistics(page, func_exit):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=exit_button_create(func_exit),
+                                ft.Container(content=exit_button_create(),
                                              right=5,
                                              bottom=80,
                                              width=100,

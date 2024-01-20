@@ -1,6 +1,7 @@
 import flet as ft
 from datetime import datetime
 import model
+import dialogs
 
 
 ##################
@@ -23,13 +24,12 @@ def new_record_button_create(page):
     return new_record_button
 
 
-def exit_button_create(func_exit):
-    """creates a button that exits application
-     :param func_exit: function that exits an app"""
+def exit_button_create():
+    """creates a button that exits application"""
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
                                         shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=func_exit)
+                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
     return exit_button
 
 
@@ -76,10 +76,9 @@ open_maps = ft.Chip(
 ###########
 #  Route  #
 ###########
-def route_home(page, func_exit):
+def route_home(page):
     """route to '/'
-    :param page: container for controls in View
-    :param func_exit: function for exiting an app"""
+    :param page: container for controls in View"""
     view_home = ft.View(
                 "/",
                 bgcolor=ft.colors.BLUE_100,
@@ -120,7 +119,7 @@ def route_home(page, func_exit):
                                      bottom=80,
                                      width=100,
                                      height=25,
-                                     content=exit_button_create(func_exit)),
+                                     content=exit_button_create()),
                     ],
                     width=page.window_width,
                     height=page.window_height)],
