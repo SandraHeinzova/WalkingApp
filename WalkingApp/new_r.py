@@ -149,6 +149,8 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
 def route_new(page):
     """route to '/new'
     :param page: container for controls in View"""
+    # filling the data table with data from last four walks
+    _fill_recent_walks_table(page, _data_table)
     view_new = ft.View(
         route="/new",
         bgcolor=ft.colors.BLUE_100,
