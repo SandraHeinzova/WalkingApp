@@ -1,7 +1,15 @@
 import flet as ft
 import excel_func
-import home_r
 
+
+def exit_button_create(func_exit):
+    """creates a button that exits application
+     :param func_exit: function that exits an app"""
+    exit_button = ft.ElevatedButton(text="Konec",
+                                    style=ft.ButtonStyle(
+                                        shape=ft.ContinuousRectangleBorder(radius=30)),
+                                    on_click=func_exit)
+    return exit_button
 
 def route_statistics(page, func_exit):
     """route to '/statistics'
@@ -61,7 +69,7 @@ def route_statistics(page, func_exit):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=home_r.exit_button_create(func_exit),
+                                ft.Container(content=exit_button_create(func_exit),
                                              right=5,
                                              bottom=80,
                                              width=100,

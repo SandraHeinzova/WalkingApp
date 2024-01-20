@@ -22,6 +22,7 @@ def pick_date(e):
     """updates picked_date value
     :param e: event"""
     picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(date_picker.value.strftime("%d/%m/%y"))
+    date_button.text = "{}".format(date_picker.value.strftime("%d/%m/%y"))
     e.page.update()
 
 

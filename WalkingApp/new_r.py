@@ -8,6 +8,16 @@ pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
 pattern_hours = r'^(1?[0-9]|2[0-3])$'
 
 
+def exit_button_create(func_exit):
+    """creates a button that exits application
+     :param func_exit: function that exits an app"""
+    exit_button = ft.ElevatedButton(text="Konec",
+                                    style=ft.ButtonStyle(
+                                        shape=ft.ContinuousRectangleBorder(radius=30)),
+                                    on_click=func_exit)
+    return exit_button
+
+
 def open_statistics(e):
     """Redirects to the statistics page"""
     e.page.go("/statistics")
@@ -177,7 +187,7 @@ def route_new(page, func_exit):
                 ft.Container(content=data_table,
                              left=70,
                              top=350),
-                ft.Container(content=home_r.exit_button_create(func_exit),
+                ft.Container(content=exit_button_create(func_exit),
                              right=5,
                              bottom=80,
                              width=100,
