@@ -21,7 +21,7 @@ def _exit_button_create():
 def route_statistics(page):
     """route to '/statistics'
     :param page: container for controls in View"""
-    total_km, total_time, total_kcal, total_steps = model.statistics()
+    total_km, total_time, total_kcal, total_steps = model.calculate_statistics()
     view_statistics = ft.View(
                         "/statistics",
                         bgcolor=ft.colors.BLUE_100,

@@ -56,7 +56,7 @@ def save_to_excel(date, kms: float, time, kcal: int, steps: int):
     wb.close()
 
 
-def statistics():
+def calculate_statistics():
     """receives from Excel file data, calculates statistics and returns them"""
     workbook = _open_excel(True)
     worksheet = workbook["Sheet1"]

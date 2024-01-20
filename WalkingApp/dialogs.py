@@ -4,7 +4,7 @@ import flet as ft
 ##################
 # Event Handlers #
 ##################
-def _show_confirm_dialog(page):
+def show_confirm_dialog(page):
     """every control that belongs to the confirm dialog - when user wants to exit application
     :param page: container for controls in View"""
     def yes_clicked(_):
@@ -32,7 +32,7 @@ def _show_confirm_dialog(page):
     page.update()
 
 
-def _show_incomplete_dialog(page):
+def show_incomplete_dialog(page):
     """every control that belongs to the incomplete dialog - when user forget to fill one of the
     text fields
     :param page: container for controls in View"""
@@ -55,7 +55,7 @@ def _show_incomplete_dialog(page):
     page.update()
 
 
-def _show_wrong_time_dialog(page):
+def show_wrong_time_dialog(page):
     """every control that belongs to the wrong time dialog - when user fill in wrong format of the time
     :param page: container for controls in View"""
     def go_fix_time(_):
@@ -77,7 +77,7 @@ def _show_wrong_time_dialog(page):
     page.update()
 
 
-def _show_success_dialogue(page, fill_func, table):
+def show_success_dialogue(page, fill_func, table):
     """every control that belongs to the success dialog - when user fill in everything correctly
     and application successfully saved it to the Excel
     :param page: container for controls in View
@@ -103,7 +103,7 @@ def _show_success_dialogue(page, fill_func, table):
     page.update()
 
 
-def _show_no_date_picked_dialog(page):
+def show_no_date_picked_dialog(page):
     """every control that belongs to the no date picked dialog - when user forgets to pick a date
     :param page: container for controls in View"""
     def go_pick_date(_):
