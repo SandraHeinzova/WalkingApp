@@ -16,23 +16,6 @@ def _pick_date(e):
     e.page.update()
 
 
-def _new_record_button_create(page):
-    """creates a button that redirects to the page "/new", to add new record
-    :param page: container for controls in View"""
-    new_record_button = ft.FilledButton(text="Přidej nový záznam",
-                                        on_click=lambda _: page.go("/new"))
-    return new_record_button
-
-
-def _exit_button_create():
-    """creates a button that exits application"""
-    exit_button = ft.ElevatedButton(text="Konec",
-                                    style=ft.ButtonStyle(
-                                        shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
-    return exit_button
-
-
 def _open_czech_maps(e):
     """opens maps - to check where is possible to go for a walk
     :param e: event"""
@@ -42,6 +25,16 @@ def _open_czech_maps(e):
 ###########
 #  View   #
 ###########
+# button that redirects to the page "/new", to add new record
+_new_record_button = ft.FilledButton(text="Přidej nový záznam",
+                                     on_click=lambda e: e.page.go("/new"))
+
+# button that exits application
+_exit_button = ft.ElevatedButton(text="Konec",
+                                 style=ft.ButtonStyle(
+                                     shape=ft.ContinuousRectangleBorder(radius=30)),
+                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
+
 # textfield that shows welcome text
 _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                        color=ft.colors.INDIGO,
@@ -107,7 +100,7 @@ def routing_to_home(page):
                              top=420,
                              width=200,
                              height=30,
-                             content=_new_record_button_create(page)),
+                             content=_new_record_button),
                 ft.Container(right=90,
                              bottom=195,
                              width=200,
@@ -117,7 +110,7 @@ def routing_to_home(page):
                              bottom=80,
                              width=100,
                              height=25,
-                             content=_exit_button_create()),
+                             content=_exit_button),
             ],
             width=page.window_width,
             height=page.window_height)],

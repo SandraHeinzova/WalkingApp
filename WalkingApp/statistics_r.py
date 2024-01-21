@@ -3,16 +3,14 @@ import model
 import dialogs
 
 
-##################
-# Event Handlers #
-##################
-def _exit_button_create():
-    """creates a button that exits application"""
-    exit_button = ft.ElevatedButton(text="Konec",
-                                    style=ft.ButtonStyle(
-                                        shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
-    return exit_button
+###########
+#  View   #
+###########
+# button that exits application
+_exit_button = ft.ElevatedButton(text="Konec",
+                                 style=ft.ButtonStyle(
+                                     shape=ft.ContinuousRectangleBorder(radius=30)),
+                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
 
 
 ###########
@@ -75,7 +73,7 @@ def routing_to_statistics(page):
                                              height=100,
                                              left=100,
                                              top=410),
-                                ft.Container(content=_exit_button_create(),
+                                ft.Container(content=_exit_button,
                                              right=5,
                                              bottom=80,
                                              width=100,

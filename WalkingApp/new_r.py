@@ -10,15 +10,6 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 ##################
 # Event Handlers #
 ##################
-def _exit_button_create():
-    """creates a button that exits application"""
-    exit_button = ft.ElevatedButton(text="Konec",
-                                    style=ft.ButtonStyle(
-                                        shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=lambda e: dialogs.show_confirm_dialog(e.page))
-    return exit_button
-
-
 def _open_statistics(e):
     """Redirects to the statistics page"""
     e.page.go("/statistics")
@@ -97,6 +88,12 @@ def _fill_recent_walks_table(page, table):
 ###########
 #  View   #
 ###########
+# button that exits application
+_exit_button = ft.ElevatedButton(text="Konec",
+                                 style=ft.ButtonStyle(
+                                     shape=ft.ContinuousRectangleBorder(radius=30)),
+                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
+
 # button for open the statistics page, on_click parameter with corresponding function
 _show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                             on_click=_open_statistics)
@@ -189,7 +186,7 @@ def routing_to_new(page):
                 ft.Container(content=_data_table,
                              left=70,
                              top=350),
-                ft.Container(content=_exit_button_create(),
+                ft.Container(content=_exit_button,
                              right=5,
                              bottom=80,
                              width=100,
