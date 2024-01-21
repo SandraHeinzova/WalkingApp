@@ -35,7 +35,7 @@ def main(page: ft.Page):
         if page.route == "/new" or page.route == "/statistics":
             page.views.append(new_r.routing_to_new(page))
         if page.route == "/statistics":
-            page.views.append(statistics_r.routing_to_statistics(page))
+            page.views.append(statistics_r.create_statistics_view(page))
         page.update()
 
     def view_pop(_):
