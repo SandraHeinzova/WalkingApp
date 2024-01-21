@@ -7,19 +7,10 @@ import dialogs
 ##################
 # Event Handlers #
 ##################
-def _pick_date(e):
-    """updates picked_date value
-    :param e: event"""
-    _picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(_date_picker.value.strftime("%d/%m/%y"))
-    _date_button.text = _date_picker.value.strftime("%d/%m/%y")
+def _update_picked_date(e):
     model.selected_date = _date_picker.value.strftime("%d/%m/%y")
+    _picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(model.selected_date)
     e.page.update()
-
-
-def _open_czech_maps(e):
-    """opens maps - to check where is possible to go for a walk
-    :param e: event"""
-    e.page.launch_url("https://mapy.cz/")
 
 
 ###########
@@ -52,7 +43,7 @@ _date_button = ft.ElevatedButton("Vyber datum",
                                  on_click=lambda _: _date_picker.pick_date())
 
 # date picker control - calendar to choose date
-_date_picker = ft.DatePicker(on_change=_pick_date,
+_date_picker = ft.DatePicker(on_change=_update_picked_date,
                              first_date=datetime(2023, 10, 1),
                              last_date=datetime(2030, 12, 31))
 
@@ -60,14 +51,14 @@ _date_picker = ft.DatePicker(on_change=_pick_date,
 _open_maps = ft.Chip(
     label=ft.Text("Nápad na trasu"),
     leading=ft.Icon(ft.icons.MAP_SHARP),
-    on_click=_open_czech_maps,
+    on_click=lambda e: e.page.launch_url("https://mapy.cz/"),
 )
 
 
 ###########
 #  Route  #
 ###########
-def routing_to_home(page):
+def create_home_view(page):
     """route to '/'
     :param page: container for controls in View"""
     view_home = ft.View(

@@ -31,7 +31,7 @@ def main(page: ft.Page):
     def views(_):
         """routing"""
         page.views.clear()
-        page.views.append(home_r.routing_to_home(page))
+        page.views.append(home_r.create_home_view(page))
         if page.route == "/new" or page.route == "/statistics":
             page.views.append(new_r.routing_to_new(page))
         if page.route == "/statistics":
