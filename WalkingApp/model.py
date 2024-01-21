@@ -2,9 +2,6 @@ import openpyxl
 from datetime import datetime, timedelta
 
 
-##################
-# Event Handlers #
-##################
 def _open_excel(data):
     """opens the Excel file
     :param data: data according to whether data_only are needed"""
@@ -85,15 +82,4 @@ def calculate_statistics():
     return total_km, total_time, total_kcal, total_steps
 
 
-def set_selected_date():
-    pass
-
-
-def get_selected_date():
-    pass
-
-
-###########
-#  View   #
-###########
 selected_date = None
