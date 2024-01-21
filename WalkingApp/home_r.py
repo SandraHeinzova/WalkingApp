@@ -61,6 +61,8 @@ _open_maps = ft.Chip(
 def create_home_view(page):
     """route to '/'
     :param page: container for controls in View"""
+    if _date_picker not in page.overlay:
+        page.overlay.append(_date_picker)
     view_home = ft.View(
         "/",
         bgcolor=ft.colors.BLUE_100,

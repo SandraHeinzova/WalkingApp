@@ -16,17 +16,14 @@ def main(page: ft.Page):
     page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
 
-    def window_event(e):
+    def show_exit_dialog(e):
         """function that is called, when user has clicked on
            exit button or red cross in top left corner of window"""
-        if e.data == "close" or e.name == "click":
+        if e.data == "close":
             dialogs.show_confirm_exit_dialog(page)
 
     page.window_prevent_close = True
-    page.on_window_event = window_event
-
-    # adding date picker to the application
-    page.overlay.append(home_r._date_picker)
+    page.on_window_event = show_exit_dialog
 
     def views(_):
         """routing"""
