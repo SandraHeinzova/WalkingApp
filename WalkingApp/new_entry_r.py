@@ -10,29 +10,22 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 ##################
 # Event Handlers #
 ##################
-def _open_statistics(e):
-    """Redirects to the statistics page"""
-    e.page.go("/statistics")
-
-
-def _save_time_entry(page, walked_time_entry_value):
-    """checks format of the entered time, returns time in format suitable for Excel
+def _validate_time_entry(page, walked_time_entry_value):
+    """checks format of the entered time, returns time in format hh:mm:ss
     :param page: container for controls in View
     :param walked_time_entry_value: value from walked_time_entry TextField"""
     if re.search(pattern_hours_minutes, walked_time_entry_value):
-        time_format_to_save = f"{walked_time_entry_value}:00"
-        return time_format_to_save
+        return f"{walked_time_entry_value}:00"
     elif re.search(pattern_hours, walked_time_entry_value):
-        time_format_to_save = f"{walked_time_entry_value}:00:00"
-        return time_format_to_save
+        return f"{walked_time_entry_value}:00:00"
     else:
         dialogs.show_invalid_time_format_dialog(page)
         return None
 
 
-def _save_clicked(page):
+def _validate_and_save_entry(page):
     """starts after the save button is clicked, checks if all data are entered, transfers them into required formats
-     and saves into Excel and the fields are cleared
+     and saves them, the fields are then cleared
      :param page: container for controls in View"""
     if not all([_walked_time_entry.value, _walked_kms_entry.value, _walked_kcal_entry.value,
                 _walked_steps_entry.value]):
@@ -46,7 +39,7 @@ def _save_clicked(page):
 
     date = model.selected_date
     kms = float(_walked_kms_entry.value)
-    time = _save_time_entry(page, _walked_time_entry.value)
+    time = _validate_time_entry(page, _walked_time_entry.value)
     kcal = int(_walked_kcal_entry.value)
     steps = int(_walked_steps_entry.value)
 
@@ -68,17 +61,16 @@ def _save_button_create(page):
     """creates a saving button with on_click parameter and its function
     :param page: container for controls in View"""
     save_button = ft.ElevatedButton(text="Uložit",
-                                    on_click=lambda _: _save_clicked(page))
+                                    on_click=lambda _: _validate_and_save_entry(page))
     return save_button
 
 
-def _fill_recent_walks_table(page, table):
+def _fill_recent_walks_table(page):
     """gets data from Excel, goes through them and fills data table rows with date and kms values
-    :param page: container for controls in View
-    :param table: data_table"""
+    :param page: container for controls in View"""
     walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
-    table.rows = [
+    _data_table.rows = [
         ft.DataRow(
             [ft.DataCell(ft.Text(date)), ft.DataCell(ft.Text(kms))]
         ) for date, kms in recent_walks]
@@ -96,7 +88,7 @@ _exit_button = ft.ElevatedButton(text="Konec",
 
 # button for open the statistics page, on_click parameter with corresponding function
 _show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                            on_click=_open_statistics)
+                                            on_click=lambda e: e.page.go("/statistics"))
 
 # data table that holds data from last four walks
 _data_table = ft.DataTable(
@@ -143,11 +135,11 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
 ###########
 #  Route  #
 ###########
-def routing_to_new(page):
+def create_new_entry_view(page):
     """route to '/new'
     :param page: container for controls in View"""
     # filling the data table with data from last four walks
-    _fill_recent_walks_table(page, _data_table)
+    _fill_recent_walks_table(page)
     view_new = ft.View(
         route="/new",
         bgcolor=ft.colors.BLUE_100,

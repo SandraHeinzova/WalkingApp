@@ -1,7 +1,7 @@
 import flet as ft
 import dialogs
 import statistics_r
-import new_r
+import new_entry_r
 import home_r
 
 
@@ -33,7 +33,7 @@ def main(page: ft.Page):
         page.views.clear()
         page.views.append(home_r.create_home_view(page))
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new_r.routing_to_new(page))
+            page.views.append(new_entry_r.create_new_entry_view(page))
         if page.route == "/statistics":
             page.views.append(statistics_r.create_statistics_view(page))
         page.update()
