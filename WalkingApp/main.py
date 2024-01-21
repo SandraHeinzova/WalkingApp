@@ -20,7 +20,7 @@ def main(page: ft.Page):
         """function that is called, when user has clicked on
            exit button or red cross in top left corner of window"""
         if e.data == "close" or e.name == "click":
-            dialogs.show_confirm_dialog(page)
+            dialogs.show_confirm_exit_dialog(page)
 
     page.window_prevent_close = True
     page.on_window_event = window_event

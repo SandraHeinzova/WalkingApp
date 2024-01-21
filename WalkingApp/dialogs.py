@@ -1,122 +1,100 @@
 import flet as ft
 
 
-##################
-# Event Handlers #
-##################
-def show_confirm_dialog(page):
-    """every control that belongs to the confirm dialog - when user wants to exit application
+def _close_dialog(page, dlg):
+    """goes back into the app"""
+    dlg.open = False
+    page.update()
+
+
+def show_confirm_exit_dialog(page):
+    """every control that belongs to the confirm exit dialog - when user wants to exit application
     :param page: container for controls in View"""
-    def yes_clicked(_):
-        """exits the app"""
+    def exit_app(_):
         page.window_destroy()
 
-    def no_clicked(_):
-        """goes back into the app"""
-        confirm_dialog.open = False
-        page.update()
-
-    confirm_dialog = ft.AlertDialog(
+    confirm_exit_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Potvrzení"),
         content=ft.Text("Opravdu si přeješ apku ukončit?"),
         actions=[
-            ft.ElevatedButton("Ano", on_click=yes_clicked),
-            ft.ElevatedButton("Ne", on_click=no_clicked),
+            ft.ElevatedButton("Ano", on_click=exit_app),
+            ft.ElevatedButton("Ne", on_click=lambda _: _close_dialog(page, confirm_exit_dialog)),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         open=True,
     )
 
-    page.dialog = confirm_dialog
+    page.dialog = confirm_exit_dialog
     page.update()
 
 
-def show_incomplete_dialog(page):
-    """every control that belongs to the incomplete dialog - when user forget to fill one of the
+def show_required_fields_missing_dialog(page):
+    """every control that belongs to the required fields missing dialog - when user forget to fill one of the
     text fields
     :param page: container for controls in View"""
-    def return_back(_):
-        """goes back into the app, so user can fill forgotten text fields"""
-        incomplete_dialog.open = False
-        page.update()
 
-    incomplete_dialog = ft.AlertDialog(
+    required_fields_missing_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Něco jsi zapomněl"),
         content=ft.Text("Vše musí být vyplněno"),
         actions=[
-            ft.ElevatedButton("OK, doplním", on_click=return_back)
+            ft.ElevatedButton("OK, doplním", on_click=lambda _: _close_dialog(page, required_fields_missing_dialog))
         ],
         open=True,
     )
 
-    page.dialog = incomplete_dialog
+    page.dialog = required_fields_missing_dialog
     page.update()
 
 
-def show_wrong_time_dialog(page):
-    """every control that belongs to the wrong time dialog - when user fill in wrong format of the time
+def show_invalid_time_format_dialog(page):
+    """every control that belongs to the invalid format time dialog - when user fill in wrong format of the time
     :param page: container for controls in View"""
-    def go_fix_time(_):
-        """goes back into the app, so user can fill time in right format"""
-        wrong_time_dialog.open = False
-        page.update()
 
-    wrong_time_dialog = ft.AlertDialog(
+    invalid_time_format_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Špatný formát času"),
         content=ft.Text("Zadej prosím celé hodiny, nebo hodiny a minuty."),
         actions=[
-            ft.ElevatedButton("OK", on_click=go_fix_time)
+            ft.ElevatedButton("OK", on_click=lambda _: _close_dialog(page, invalid_time_format_dialog))
         ],
         open=True,
     )
 
-    page.dialog = wrong_time_dialog
+    page.dialog = invalid_time_format_dialog
     page.update()
 
 
-def show_success_dialogue(page, fill_func, table):
-    """every control that belongs to the success dialog - when user fill in everything correctly
+def show_entry_saved_success_dialog(page):
+    """every control that belongs to the entry saved success dialog - when user fill in everything correctly
     and application successfully saved it to the Excel
-    :param page: container for controls in View
-    :param fill_func: function for filling the data table with updated data
-    :param table: the data table to be filled"""
-    def update_table(_):
-        """launches the fill_func and goes back to the app"""
-        success_dialog.open = False
-        fill_func(page, table)
-        page.update()
+    :param page: container for controls in View"""
 
-    success_dialog = ft.AlertDialog(
+    entry_saved_success_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Úspěch"),
         content=ft.Text("Vše bylo úspěšně zapsáno"),
         actions=[
-            ft.ElevatedButton("OK", on_click=update_table)
+            ft.ElevatedButton("OK", on_click=lambda _: _close_dialog(page, entry_saved_success_dialog))
         ],
         open=True,
     )
 
-    page.dialog = success_dialog
+    page.dialog = entry_saved_success_dialog
     page.update()
 
 
 def show_no_date_picked_dialog(page):
     """every control that belongs to the no date picked dialog - when user forgets to pick a date
     :param page: container for controls in View"""
-    def go_pick_date(_):
-        """goes back into the app, so user can pick a date"""
-        no_date_picked_dialog.open = False
-        page.update()
 
     no_date_picked_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Chybí vybrané datum"),
         content=ft.Text("Vyber datum prosím"),
         actions=[
-            ft.ElevatedButton("Jdu vybrat", on_click=go_pick_date)
+            ft.ElevatedButton("Jdu vybrat", on_click=lambda _: _close_dialog(page, no_date_picked_dialog))
         ],
         open=True,
     )

@@ -10,7 +10,7 @@ import dialogs
 _exit_button = ft.ElevatedButton(text="Konec",
                                  style=ft.ButtonStyle(
                                      shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
+                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
 
 
 ###########

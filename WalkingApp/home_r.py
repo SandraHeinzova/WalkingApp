@@ -33,7 +33,7 @@ _new_record_button = ft.FilledButton(text="Přidej nový záznam",
 _exit_button = ft.ElevatedButton(text="Konec",
                                  style=ft.ButtonStyle(
                                      shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
+                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
 
 # textfield that shows welcome text
 _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",

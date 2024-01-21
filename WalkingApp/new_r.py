@@ -26,7 +26,7 @@ def _save_time_entry(page, walked_time_entry_value):
         time_format_to_save = f"{walked_time_entry_value}:00:00"
         return time_format_to_save
     else:
-        dialogs.show_wrong_time_dialog(page)
+        dialogs.show_invalid_time_format_dialog(page)
         return None
 
 
@@ -36,7 +36,7 @@ def _save_clicked(page):
      :param page: container for controls in View"""
     if not all([_walked_time_entry.value, _walked_kms_entry.value, _walked_kcal_entry.value,
                 _walked_steps_entry.value]):
-        dialogs.show_incomplete_dialog(page)
+        dialogs.show_required_fields_missing_dialog(page)
         return
 
     if not model.selected_date:
@@ -55,7 +55,7 @@ def _save_clicked(page):
 
     model.save_to_excel(date, kms, time, kcal, steps)
 
-    dialogs.show_success_dialogue(page, _fill_recent_walks_table, _data_table)
+    dialogs.show_entry_saved_success_dialog(page)
 
     _walked_kms_entry.value = ""
     _walked_time_entry.value = ""
@@ -92,7 +92,7 @@ def _fill_recent_walks_table(page, table):
 _exit_button = ft.ElevatedButton(text="Konec",
                                  style=ft.ButtonStyle(
                                      shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_dialog(e.page))
+                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
 
 # button for open the statistics page, on_click parameter with corresponding function
 _show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
