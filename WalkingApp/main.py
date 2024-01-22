@@ -27,12 +27,12 @@ def main(page: ft.Page):
 
     def views(_):
         """routing"""
-        page.views.clear()
-        page.views.append(home_r.create_home_view(page))
+        views_list = [home_r.create_home_view(page)]
         if page.route == "/new" or page.route == "/statistics":
-            page.views.append(new_entry_r.create_new_entry_view(page))
+            views_list.append(new_entry_r.create_new_entry_view(page))
         if page.route == "/statistics":
-            page.views.append(statistics_r.create_statistics_view(page))
+            views_list.append(statistics_r.create_statistics_view(page))
+        page.views[:] = views_list
         page.update()
 
     def view_pop(_):
