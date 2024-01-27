@@ -1,85 +1,68 @@
-import openpyxl
-from datetime import datetime, timedelta
+import sqlite3
 
 
-def _open_excel(data):
-    """opens the Excel file
-    :param data: data according to whether data_only are needed"""
+def _open_database():
+    """connect to the database"""
     try:
-        file = "walking_data.xlsx"
-        load_file = openpyxl.load_workbook(file, data_only=data)
-        return load_file
-    except FileNotFoundError:
-        template = "new_template.xlsx"
-        load_file = openpyxl.load_workbook(template, data_only=data)
-        return load_file
+        conn = sqlite3.connect("walking_data.db")
+        conn.execute('''CREATE TABLE WALKS
+                    (DATE   CHAR(10)    NOT NULL,
+                    KMS     REAL        NOT NULL,
+                    TIME    TIME        NOT NULL,
+                    KCAL    INT         NOT NULL,
+                    STEPS   INT         NOT NULL)''')
+
+        conn.commit()
+        return conn
+
+    except sqlite3.OperationalError:
+        return sqlite3.connect("walking_data.db")
 
 
 def get_recent_walks():
-    """gets four last walks from Excel and returns them"""
-    wb = _open_excel(True)
-    ws = wb["Sheet1"]
+    """gets four last walks from database and returns them"""
+    conn = _open_database()
+    cursor = conn.cursor()
 
     data = []
-    if ws.max_row >= 2:
-        num_records = min(ws.max_row - 1, 4)
-        for num in range(ws.max_row, ws.max_row - num_records, -1):
-            date = ws[f'a{num}'].value if type(ws[f'a{num}'].value) is str else ws[f'a{num}'].value.strftime('%d/%m/%Y')
-            kms = ws[f'b{num}'].value
-            data.append((date, kms))
+    cursor.execute("SELECT * FROM WALKS ORDER BY date DESC LIMIT 4")
+    rows = cursor.fetchall()
 
-    wb.close()
+    for row in rows:
+        data.append((row[0], row[1]))
+
+    conn.close()
     return data
 
 
-def save_to_excel(date, kms: float, time, kcal: int, steps: int):
-    """gets checked data as params and save them into Excel file
+def save_to_database(date, kms: float, time, kcal: int, steps: int):
+    """gets checked data as params and save them into database
     :param date: date value in required format
     :param kms: kilometres, float value
     :param time: time value in required format
     :param kcal: amount of kcal, int value
     :param steps: amount of steps, int value"""
-    wb = _open_excel(False)
-    ws = wb["Sheet1"]
+    conn = _open_database()
 
-    insert_into_excel = [date,
-                         kms,
-                         time,
-                         kcal,
-                         steps]
-    ws.append(insert_into_excel)
-
-    wb.save("walking_data.xlsx")
-    wb.close()
+    conn.execute("INSERT INTO WALKS VALUES (?, ?, ?, ?, ?)", [date, kms, time, kcal, steps])
+    conn.commit()
+    conn.close()
 
 
 def calculate_statistics():
-    """receives from Excel file data, calculates statistics and returns them"""
-    workbook = _open_excel(True)
-    worksheet = workbook["Sheet1"]
+    """receives data from database, calculates statistics and returns them"""
+    conn = _open_database()
 
-    column_km = worksheet["B"]
-    column_kcal = worksheet["D"]
-    column_steps = worksheet["E"]
-    total_time = timedelta()
+    total_km = conn.execute("SELECT SUM(kms) FROM WALKS").fetchone()
 
-    total_km = sum(float(cell.value) for cell in column_km if isinstance(cell.value, (int, float)))
+    total_time = conn.execute("SELECT time(SUM(strftime('%s', time)),'unixepoch') FROM WALKS").fetchone()
 
-    for row in worksheet.iter_rows(min_row=2, max_col=3, values_only=True):
-        time = datetime.strptime(str(row[2]), "%H:%M:%S").time()
-        time_timedelta = timedelta(
-            hours=time.hour,
-            minutes=time.minute,
-            seconds=time.second
-        )
-        total_time += time_timedelta
+    total_kcal = conn.execute("SELECT SUM(kcal) FROM WALKS").fetchone()
 
-    total_kcal = sum(int(cell.value) for cell in column_kcal if isinstance(cell.value, (int, float)))
+    total_steps = conn.execute("SELECT SUM(steps) FROM WALKS").fetchone()
 
-    total_steps = sum(int(cell.value) for cell in column_steps if isinstance(cell.value, (int, float)))
-
-    workbook.close()
-    return total_km, total_time, total_kcal, total_steps
+    conn.close()
+    return total_km[0], total_time[0], total_kcal[0], total_steps[0]
 
 
 selected_date = None

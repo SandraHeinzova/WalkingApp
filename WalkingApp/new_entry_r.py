@@ -46,7 +46,7 @@ def _validate_and_save_entry(page):
     if time is None:
         return
 
-    model.save_to_excel(date, kms, time, kcal, steps)
+    model.save_to_database(date, kms, time, kcal, steps)
 
     dialogs.show_entry_saved_success_dialog(page)
 
