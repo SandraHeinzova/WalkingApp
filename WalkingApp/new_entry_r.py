@@ -11,13 +11,16 @@ pattern_hours = r'^(1?[0-9]|2[0-3])$'
 # Event Handlers #
 ##################
 def _validate_time_entry(page, walked_time_entry_value):
-    """checks format of the entered time, returns time in format hh:mm:ss
+    """checks format of the entered time, returns time in minutes
     :param page: container for controls in View
     :param walked_time_entry_value: value from walked_time_entry TextField"""
     if re.search(pattern_hours_minutes, walked_time_entry_value):
-        return f"{walked_time_entry_value}:00"
+        hours, minutes = map(int, walked_time_entry_value.split(":"))
+        total_time_minutes = hours * 60 + minutes
+        return total_time_minutes
     elif re.search(pattern_hours, walked_time_entry_value):
-        return f"{walked_time_entry_value}:00:00"
+        total_time_minutes = walked_time_entry_value * 60
+        return total_time_minutes
     else:
         dialogs.show_invalid_time_format_dialog(page)
         return None
@@ -54,6 +57,7 @@ def _validate_and_save_entry(page):
     _walked_time_entry.value = ""
     _walked_kcal_entry.value = ""
     _walked_steps_entry.value = ""
+    _fill_recent_walks_table(page)
     page.update()
 
 
