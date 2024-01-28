@@ -6,11 +6,11 @@ def _open_database():
     try:
         conn = sqlite3.connect("walking_data.db")
         conn.execute('''CREATE TABLE WALKS
-                    (DATE   CHAR(10)    NOT NULL,
-                    KMS     REAL        NOT NULL,
-                    TIME    TIME        NOT NULL,
-                    KCAL    INT         NOT NULL,
-                    STEPS   INT         NOT NULL)''')
+                    (DATE     CHAR(10)    NOT NULL,
+                    KMS       REAL        NOT NULL,
+                    DURATION  INT         NOT NULL,
+                    KCAL      INT         NOT NULL,
+                    STEPS     INT         NOT NULL)''')
 
         conn.commit()
         return conn
@@ -55,7 +55,7 @@ def calculate_statistics():
 
     total_km = conn.execute("SELECT SUM(kms) FROM WALKS").fetchone()
 
-    total_time = conn.execute("SELECT time(SUM(strftime('%s', time)),'unixepoch') FROM WALKS").fetchone()
+    total_time = conn.execute("SELECT SUM(duration) FROM WALKS").fetchone()
 
     total_kcal = conn.execute("SELECT SUM(kcal) FROM WALKS").fetchone()
 
