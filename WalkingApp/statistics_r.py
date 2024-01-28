@@ -36,7 +36,8 @@ def create_statistics_view(page):
                              height=100,
                              left=100,
                              top=20),
-                ft.Container(content=ft.Text("{} hod.".format(total_time if total_time else "0")),
+                ft.Container(content=ft.Text("{} hod.".format(f'{total_time // 60}:{total_time % 60:02}:00' if
+                                                              total_time else "0")),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
