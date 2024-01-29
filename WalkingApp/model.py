@@ -18,14 +18,8 @@ def _open_database():
 def get_recent_walks():
     """gets four last walks from database and returns them"""
     conn = _open_database()
-    cursor = conn.cursor()
 
-    data = []
-    cursor.execute("SELECT * FROM WALKS ORDER BY date DESC LIMIT 4")
-    rows = cursor.fetchall()
-
-    for row in rows:
-        data.append((row[0], row[1]))
+    data = [tuple(row) for row in conn.execute("SELECT date, kms FROM WALKS ORDER BY date DESC LIMIT 4")]
 
     conn.close()
     return data
@@ -49,16 +43,10 @@ def calculate_statistics():
     """receives data from database, calculates statistics and returns them"""
     conn = _open_database()
 
-    total_km = conn.execute("SELECT SUM(kms) FROM WALKS").fetchone()
-
-    total_time = conn.execute("SELECT SUM(duration) FROM WALKS").fetchone()
-
-    total_kcal = conn.execute("SELECT SUM(kcal) FROM WALKS").fetchone()
-
-    total_steps = conn.execute("SELECT SUM(steps) FROM WALKS").fetchone()
+    totals = tuple(conn.execute("SELECT SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS").fetchone())
 
     conn.close()
-    return total_km[0], total_time[0], total_kcal[0], total_steps[0]
+    return totals
 
 
 selected_date = None
