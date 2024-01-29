@@ -3,20 +3,16 @@ import sqlite3
 
 def _open_database():
     """connect to the database"""
-    try:
-        conn = sqlite3.connect("walking_data.db")
-        conn.execute('''CREATE TABLE WALKS
+    conn = sqlite3.connect("walking_data.db")
+    conn.execute('''CREATE TABLE IF NOT EXISTS WALKS
                     (DATE     CHAR(10)    NOT NULL,
                     KMS       REAL        NOT NULL,
                     DURATION  INT         NOT NULL,
                     KCAL      INT         NOT NULL,
                     STEPS     INT         NOT NULL)''')
 
-        conn.commit()
-        return conn
-
-    except sqlite3.OperationalError:
-        return sqlite3.connect("walking_data.db")
+    conn.commit()
+    return conn
 
 
 def get_recent_walks():
