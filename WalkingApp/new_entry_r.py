@@ -19,7 +19,7 @@ def _validate_time_entry(page, walked_time_entry_value):
         total_time_minutes = hours * 60 + minutes
         return total_time_minutes
     elif re.search(pattern_hours, walked_time_entry_value):
-        total_time_minutes = walked_time_entry_value * 60
+        total_time_minutes = int(walked_time_entry_value) * 60
         return total_time_minutes
     else:
         dialogs.show_invalid_time_format_dialog(page)
