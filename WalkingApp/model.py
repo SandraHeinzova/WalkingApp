@@ -1,6 +1,8 @@
 import sqlite3
+from contextlib import contextmanager
 
 
+@contextmanager
 def _open_database():
     """connect to the database"""
     conn = sqlite3.connect("walking_data.db")
@@ -12,17 +14,14 @@ def _open_database():
                     STEPS     INT         NOT NULL)''')
 
     conn.commit()
-    return conn
+    yield conn
+    conn.close()
 
 
 def get_recent_walks():
     """gets four last walks from database and returns them"""
-    conn = _open_database()
-
-    data = [tuple(row) for row in conn.execute("SELECT date, kms FROM WALKS ORDER BY date DESC LIMIT 4")]
-
-    conn.close()
-    return data
+    with _open_database() as conn:
+        return [tuple(row) for row in conn.execute("SELECT date, kms FROM WALKS ORDER BY date DESC LIMIT 4")]
 
 
 def save_to_database(date, kms: float, time, kcal: int, steps: int):
@@ -32,21 +31,15 @@ def save_to_database(date, kms: float, time, kcal: int, steps: int):
     :param time: time value in required format
     :param kcal: amount of kcal, int value
     :param steps: amount of steps, int value"""
-    conn = _open_database()
-
-    conn.execute("INSERT INTO WALKS VALUES (?, ?, ?, ?, ?)", [date, kms, time, kcal, steps])
-    conn.commit()
-    conn.close()
+    with _open_database() as conn:
+        conn.execute("INSERT INTO WALKS VALUES (?, ?, ?, ?, ?)", [date, kms, time, kcal, steps])
+        conn.commit()
 
 
 def calculate_statistics():
     """receives data from database, calculates statistics and returns them"""
-    conn = _open_database()
-
-    totals = tuple(conn.execute("SELECT SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS").fetchone())
-
-    conn.close()
-    return totals
+    with _open_database() as conn:
+        return tuple(conn.execute("SELECT SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS").fetchone())
 
 
 selected_date = None
