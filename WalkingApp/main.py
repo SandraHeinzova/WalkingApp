@@ -6,7 +6,6 @@ import home_r
 
 
 def main(page: ft.Page):
-    """the applications entry point"""
     page.title = "WalkingApp"
     page.padding = 0
     page.window_width = 400
@@ -17,16 +16,16 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
 
     def show_exit_dialog(e):
-        """function that is called, when user has clicked on
-           exit button or red cross in top left corner of window"""
         if e.data == "close":
             dialogs.show_confirm_exit_dialog(page)
 
     page.window_prevent_close = True
     page.on_window_event = show_exit_dialog
 
-    def views(_):
-        """routing"""
+    def handle_route_change(_):
+        """
+        Update the views list of the page when the route changes.
+        """
         views_list = [home_r.create_home_view(page)]
         if page.route == "/new" or page.route == "/statistics":
             views_list.append(new_entry_r.create_new_entry_view(page))
@@ -35,13 +34,13 @@ def main(page: ft.Page):
         page.views[:] = views_list
         page.update()
 
-    def view_pop(_):
+    def handle_view_pop(_):
         page.views.pop()
         top_view = page.views[-1]
         page.go(top_view.route)
 
-    page.on_route_change = views
-    page.on_view_pop = view_pop
+    page.on_route_change = handle_route_change
+    page.on_view_pop = handle_view_pop
     page.go(page.route)
 
 
