@@ -2,14 +2,11 @@ import flet as ft
 
 
 def _close_dialog(page, dlg):
-    """goes back into the app"""
     dlg.open = False
     page.update()
 
 
 def show_confirm_exit_dialog(page):
-    """every control that belongs to the confirm exit dialog - when user wants to exit application
-    :param page: container for controls in View"""
     def exit_app(_):
         page.window_destroy()
 
@@ -30,10 +27,6 @@ def show_confirm_exit_dialog(page):
 
 
 def show_required_fields_missing_dialog(page):
-    """every control that belongs to the required fields missing dialog - when user forget to fill one of the
-    text fields
-    :param page: container for controls in View"""
-
     required_fields_missing_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Něco jsi zapomněl"),
@@ -49,9 +42,6 @@ def show_required_fields_missing_dialog(page):
 
 
 def show_invalid_time_format_dialog(page):
-    """every control that belongs to the invalid format time dialog - when user fill in wrong format of the time
-    :param page: container for controls in View"""
-
     invalid_time_format_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Špatný formát času"),
@@ -67,10 +57,6 @@ def show_invalid_time_format_dialog(page):
 
 
 def show_entry_saved_success_dialog(page):
-    """every control that belongs to the entry saved success dialog - when user fill in everything correctly
-    and application successfully saved it to the Excel
-    :param page: container for controls in View"""
-
     entry_saved_success_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Úspěch"),
@@ -86,9 +72,6 @@ def show_entry_saved_success_dialog(page):
 
 
 def show_no_date_picked_dialog(page):
-    """every control that belongs to the no date picked dialog - when user forgets to pick a date
-    :param page: container for controls in View"""
-
     no_date_picked_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Chybí vybrané datum"),
