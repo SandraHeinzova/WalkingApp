@@ -11,9 +11,10 @@ PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
 # Event Handlers #
 ##################
 def _validate_time_entry(page, walked_time_entry_value):
-    """checks format of the entered time, returns time in minutes
-    :param page: container for controls in View
-    :param walked_time_entry_value: value from walked_time_entry TextField"""
+    """Validate entered time and convert it to minutes
+    :param page: ft.Page
+    :param walked_time_entry_value: value from walked_time_entry TextField
+    """
     if PATTERN_HOURS_MINUTES.search(walked_time_entry_value):
         hours, minutes = map(int, walked_time_entry_value.split(":"))
         total_time_minutes = hours * 60 + minutes
@@ -27,9 +28,9 @@ def _validate_time_entry(page, walked_time_entry_value):
 
 
 def _validate_and_save_entry(page):
-    """starts after the save button is clicked, checks if all data are entered, transfers them into required formats
-     and saves them, the fields are then cleared
-     :param page: container for controls in View"""
+    """Validate entered values, save the walk to the database and clear all text fields
+     :param page: ft.Page
+     """
     if not all([_walked_time_entry.value, _walked_kms_entry.value, _walked_kcal_entry.value,
                 _walked_steps_entry.value]):
         dialogs.show_required_fields_missing_dialog(page)
@@ -62,16 +63,12 @@ def _validate_and_save_entry(page):
 
 
 def _save_button_create(page):
-    """creates a saving button with on_click parameter and its function
-    :param page: container for controls in View"""
     save_button = ft.ElevatedButton(text="Uložit",
                                     on_click=lambda _: _validate_and_save_entry(page))
     return save_button
 
 
 def _fill_recent_walks_table(page):
-    """gets data from Excel, goes through them and fills data table rows with date and kms values
-    :param page: container for controls in View"""
     walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
     _data_table.rows = [
@@ -140,9 +137,9 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
 #  Route  #
 ###########
 def create_new_entry_view(page):
-    """route to '/new'
-    :param page: container for controls in View"""
-    # filling the data table with data from last four walks
+    """Return the view for the '/new route'
+    :param page:ft.Page
+    """
     _fill_recent_walks_table(page)
     view_new = ft.View(
         route="/new",
