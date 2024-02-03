@@ -16,11 +16,11 @@ def _update_picked_date(e):
 ###########
 #  View   #
 ###########
-# button that redirects to the page "/new", to add new record
+# button that redirects to the page "/new"route for adding a new record
 _new_record_button = ft.FilledButton(text="Přidej nový záznam",
                                      on_click=lambda e: e.page.go("/new"))
 
-# button that exits application
+# button that exits the application
 _exit_button = ft.ElevatedButton(text="Konec",
                                  style=ft.ButtonStyle(
                                      shape=ft.ContinuousRectangleBorder(radius=30)),
@@ -32,7 +32,7 @@ _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                        style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                        text_align=ft.TextAlign.CENTER)
 
-# textfield that shows which date hase user picked from date_picker, to check if it's correct
+# textfield that shows the date picked by the user
 _picked_date = ft.Text(value="Vyber datum",
                        text_align=ft.TextAlign.CENTER,
                        color=ft.colors.WHITE54)
@@ -47,7 +47,7 @@ _date_picker = ft.DatePicker(on_change=_update_picked_date,
                              first_date=datetime(2023, 10, 1),
                              last_date=datetime(2030, 12, 31))
 
-# control that activate open_czech_maps function
+# control that opens maps in the browser
 _open_maps = ft.Chip(
     label=ft.Text("Nápad na trasu"),
     leading=ft.Icon(ft.icons.MAP_SHARP),
@@ -59,7 +59,7 @@ _open_maps = ft.Chip(
 #  Route  #
 ###########
 def create_home_view(page):
-    """route to '/'
+    """Return the view for the '/' route
     :param page: container for controls in View"""
     if _date_picker not in page.overlay:
         page.overlay.append(_date_picker)
