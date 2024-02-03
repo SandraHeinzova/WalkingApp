@@ -3,8 +3,8 @@ import re
 import dialogs
 import model
 
-pattern_hours_minutes = r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$'
-pattern_hours = r'^(1?[0-9]|2[0-3])$'
+PATTERN_HOURS_MINUTES = re.compile(r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$')
+PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
 
 
 ##################
@@ -14,11 +14,11 @@ def _validate_time_entry(page, walked_time_entry_value):
     """checks format of the entered time, returns time in minutes
     :param page: container for controls in View
     :param walked_time_entry_value: value from walked_time_entry TextField"""
-    if re.search(pattern_hours_minutes, walked_time_entry_value):
+    if PATTERN_HOURS_MINUTES.search(walked_time_entry_value):
         hours, minutes = map(int, walked_time_entry_value.split(":"))
         total_time_minutes = hours * 60 + minutes
         return total_time_minutes
-    elif re.search(pattern_hours, walked_time_entry_value):
+    elif PATTERN_HOURS.search(walked_time_entry_value):
         total_time_minutes = int(walked_time_entry_value) * 60
         return total_time_minutes
     else:
