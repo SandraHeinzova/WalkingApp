@@ -4,8 +4,10 @@ import dialogs
 
 
 def create_statistics_view(page):
-    """route to '/statistics'
-    :param page: container for controls in View"""
+    """
+    Return the view for the '/statistics' route.
+    :param page: ft.Page
+    """
     # button that exits application
     exit_button = ft.ElevatedButton(text="Konec",
                                     style=ft.ButtonStyle(
@@ -26,7 +28,7 @@ def create_statistics_view(page):
                     width=page.window_width,
                     height=page.window_height,
                     fit=ft.ImageFit.FILL),
-                ft.Container(content=ft.Text("{} Km".format(round(total_km) if total_km else 0)),
+                ft.Container(content=ft.Text(f"{round(total_km) if total_km else 0} Km"),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -36,8 +38,8 @@ def create_statistics_view(page):
                              height=100,
                              left=100,
                              top=20),
-                ft.Container(content=ft.Text("{} hod.".format(f'{total_time // 60}:{total_time % 60:02}:00' if
-                                                              total_time else "0")),
+                ft.Container(content=ft.Text(f"{total_time // 60}:{total_time % 60:02}:00 hod." if total_time
+                                             else "0 hod."),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -47,7 +49,7 @@ def create_statistics_view(page):
                              height=100,
                              left=100,
                              top=150),
-                ft.Container(content=ft.Text("{} Kcal".format(total_kcal if total_kcal else "0")),
+                ft.Container(content=ft.Text(f"{total_kcal or 0} Kcal"),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -57,7 +59,7 @@ def create_statistics_view(page):
                              height=100,
                              left=100,
                              top=280),
-                ft.Container(content=ft.Text("{} kroků".format(total_steps if total_steps else "0")),
+                ft.Container(content=ft.Text(f"{total_steps or 0} kroků"),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
