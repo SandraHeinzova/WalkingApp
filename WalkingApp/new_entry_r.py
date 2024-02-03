@@ -62,12 +62,6 @@ def _validate_and_save_entry(page):
     page.update()
 
 
-def _save_button_create(page):
-    save_button = ft.ElevatedButton(text="Uložit",
-                                    on_click=lambda _: _validate_and_save_entry(page))
-    return save_button
-
-
 def _fill_recent_walks_table(page):
     walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
@@ -170,7 +164,8 @@ def create_new_entry_view(page):
                              top=110,
                              left=200,
                              bgcolor=ft.colors.BLUE_50),
-                ft.Container(content=_save_button_create(page),
+                ft.Container(content=ft.ElevatedButton(text="Uložit",
+                                                       on_click=lambda _: _validate_and_save_entry(page)),
                              top=200,
                              left=20),
                 ft.Container(content=_show_statistics_button,
