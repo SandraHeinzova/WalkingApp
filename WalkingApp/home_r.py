@@ -29,7 +29,7 @@ _exit_button = ft.ElevatedButton(text="Konec",
 # textfield that shows welcome text
 _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                        color=ft.colors.INDIGO,
-                       style=ft.TextThemeStyle.DISPLAY_MEDIUM,
+                       theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                        text_align=ft.TextAlign.CENTER)
 
 # textfield that shows the date picked by the user
