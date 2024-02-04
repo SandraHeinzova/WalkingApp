@@ -7,15 +7,12 @@ def _close_dialog(page, dlg):
 
 
 def show_confirm_exit_dialog(page):
-    def exit_app(_):
-        page.window_destroy()
-
     confirm_exit_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Potvrzení"),
         content=ft.Text("Opravdu si přeješ apku ukončit?"),
         actions=[
-            ft.ElevatedButton("Ano", on_click=exit_app),
+            ft.ElevatedButton("Ano", on_click=lambda _: page.window_destroy()),
             ft.ElevatedButton("Ne", on_click=lambda _: _close_dialog(page, confirm_exit_dialog)),
         ],
         actions_alignment=ft.MainAxisAlignment.END,

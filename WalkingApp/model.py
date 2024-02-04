@@ -31,7 +31,7 @@ def get_recent_walks():
 def save_to_database(date, kms: float, time, kcal: int, steps: int):
     """
     Insert a new walk into the database.
-    :param date: date value the "%d/%m/%y" format
+    :param date: date value in the "%d/%m/%y" format
     :param kms: kilometres
     :param time: duration expressed as the number of minutes
     :param kcal: amount of kcal
