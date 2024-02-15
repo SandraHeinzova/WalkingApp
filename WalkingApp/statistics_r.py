@@ -1,6 +1,6 @@
 import flet as ft
 import model
-import dialogs
+import routing
 
 
 def create_statistics_view(page):
@@ -8,18 +8,11 @@ def create_statistics_view(page):
     Return the view for the '/statistics' route.
     :param page: ft.Page
     """
-    # button that exits application
-    exit_button = ft.ElevatedButton(text="Konec",
-                                    style=ft.ButtonStyle(
-                                        shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
-
     total_km, total_time, total_kcal, total_steps = model.calculate_statistics()
     view_statistics = ft.View(
         "/statistics",
         bgcolor=ft.colors.BLUE_100,
-        appbar=ft.AppBar(title=ft.Text("Statistiky"),
-                         bgcolor=ft.colors.BLUE_100),
+        navigation_bar=routing.nav_bar,
         padding=0,
         controls=[
             ft.Stack(controls=[
@@ -69,11 +62,6 @@ def create_statistics_view(page):
                              height=100,
                              left=100,
                              top=410),
-                ft.Container(content=exit_button,
-                             right=5,
-                             bottom=80,
-                             width=100,
-                             height=25),
             ],
                 width=page.window_width,
                 height=page.window_height - 70)]

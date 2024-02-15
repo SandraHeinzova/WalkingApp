@@ -2,6 +2,7 @@ import flet as ft
 import re
 import dialogs
 import model
+import routing
 
 PATTERN_HOURS_MINUTES = re.compile(r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$')
 PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
@@ -75,12 +76,6 @@ def _fill_recent_walks_table(page):
 ###########
 #  View   #
 ###########
-# button that exits application
-_exit_button = ft.ElevatedButton(text="Konec",
-                                 style=ft.ButtonStyle(
-                                     shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
-
 # button for open the statistics page, on_click parameter with corresponding function
 _show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
                                             on_click=lambda e: e.page.go("/statistics"))
@@ -139,8 +134,7 @@ def create_new_entry_view(page):
         route="/new",
         bgcolor=ft.colors.BLUE_100,
         padding=0,
-        appbar=ft.AppBar(title=ft.Text("Nový záznam"),
-                         bgcolor=ft.colors.BLUE_100),
+        navigation_bar=routing.nav_bar,
         controls=[
             ft.Stack(controls=[
                 ft.Image(
@@ -174,11 +168,6 @@ def create_new_entry_view(page):
                 ft.Container(content=_data_table,
                              left=70,
                              top=350),
-                ft.Container(content=_exit_button,
-                             right=5,
-                             bottom=80,
-                             width=100,
-                             height=25)
             ],
                 width=page.window_width,
                 height=page.window_height - 70)]

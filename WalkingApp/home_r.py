@@ -1,7 +1,7 @@
 import flet as ft
 from datetime import datetime
 import model
-import dialogs
+import routing
 
 
 ##################
@@ -19,12 +19,6 @@ def _update_picked_date(e):
 # button that redirects to the page "/new"route for adding a new record
 _new_record_button = ft.FilledButton(text="Přidej nový záznam",
                                      on_click=lambda e: e.page.go("/new"))
-
-# button that exits the application
-_exit_button = ft.ElevatedButton(text="Konec",
-                                 style=ft.ButtonStyle(
-                                     shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
 
 # textfield that shows welcome text
 _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
@@ -67,6 +61,7 @@ def create_home_view(page):
         "/",
         bgcolor=ft.colors.BLUE_100,
         padding=0,
+        navigation_bar=routing.nav_bar,
         controls=[ft.Stack(
             [
                 ft.Image(
@@ -99,13 +94,8 @@ def create_home_view(page):
                              width=200,
                              height=50,
                              content=_open_maps),
-                ft.Container(right=5,
-                             bottom=80,
-                             width=100,
-                             height=25,
-                             content=_exit_button),
             ],
             width=page.window_width,
-            height=page.window_height)],
+            height=page.window_height - 70)],
     )
     return view_home
