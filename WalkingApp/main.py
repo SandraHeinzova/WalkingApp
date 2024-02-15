@@ -10,7 +10,7 @@ def main(page: ft.Page):
     page.padding = 0
     page.window_width = 400
     page.window_height = 850
-    page.bgcolor = ft.colors.RED_100
+    page.bgcolor = ft.colors.BLUE_100
     page.window_resizable = False
     page.window_maximizable = False
     page.theme_mode = ft.ThemeMode.LIGHT
