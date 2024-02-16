@@ -66,6 +66,7 @@ def _validate_and_save_entry(page):
     _walked_time_entry.value = ""
     _walked_kcal_entry.value = ""
     _walked_steps_entry.value = ""
+    _date_button.text = "Vyber datum"
     _fill_recent_walks_table(page)
     page.update()
 
@@ -191,7 +192,7 @@ def create_new_entry_view(page):
                              top=380,
                              right=160),
                 ft.Container(content=_data_table,
-                             left=85,
+                             left=65,
                              top=450),
             ],
                 width=page.window_width,
