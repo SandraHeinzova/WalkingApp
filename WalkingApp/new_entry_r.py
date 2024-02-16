@@ -86,7 +86,7 @@ def _fill_recent_walks_table(page):
 ###########
 # textfield that shows new record text
 _new_record_txt = ft.Text(value="\nPřidej záznam!\n",
-                          color=ft.colors.INDIGO,
+                          color=ft.colors.CYAN_900,
                           size=40,
                           theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                           text_align=ft.TextAlign.CENTER)
