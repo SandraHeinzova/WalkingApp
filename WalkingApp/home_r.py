@@ -16,10 +16,6 @@ def _update_picked_date(e):
 ###########
 #  View   #
 ###########
-# button that redirects to the page "/new"route for adding a new record
-_new_record_button = ft.FilledButton(text="Přidej nový záznam",
-                                     on_click=lambda e: e.page.go("/new"))
-
 # textfield that shows welcome text
 _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
                        color=ft.colors.INDIGO,
@@ -78,21 +74,6 @@ def create_home_view(page):
                              top=280,
                              width=180,
                              height=35,
-                             content=_date_button),
-                ft.Container(right=90,
-                             top=325,
-                             height=50,
-                             width=200,
-                             content=_picked_date),
-                ft.Container(right=90,
-                             top=420,
-                             width=200,
-                             height=30,
-                             content=_new_record_button),
-                ft.Container(right=90,
-                             bottom=195,
-                             width=200,
-                             height=50,
                              content=_open_maps),
             ],
             width=page.window_width,
