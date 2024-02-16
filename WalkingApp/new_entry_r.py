@@ -1,5 +1,6 @@
 import flet as ft
 import re
+from datetime import datetime
 import dialogs
 import model
 import routing
@@ -11,6 +12,12 @@ PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
 ##################
 # Event Handlers #
 ##################
+def _update_picked_date(e):
+    model.selected_date = _date_picker.value.strftime("%d/%m/%y")
+    _date_button.text = "{}".format(model.selected_date)
+    e.page.update()
+
+
 def _validate_time_entry(page, walked_time_entry_value):
     """Validate entered time and convert it to minutes
     :param page: ft.Page
@@ -76,10 +83,12 @@ def _fill_recent_walks_table(page):
 ###########
 #  View   #
 ###########
-# button for open the statistics page, on_click parameter with corresponding function
-_show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                            on_click=lambda e: e.page.go("/statistics"))
-
+# textfield that shows new record text
+_new_record_txt = ft.Text(value="\nPřidej záznam!\n",
+                          color=ft.colors.INDIGO,
+                          size=40,
+                          theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
+                          text_align=ft.TextAlign.CENTER)
 # data table that holds data from last four walks
 _data_table = ft.DataTable(
     bgcolor=ft.colors.WHITE54,
@@ -121,6 +130,15 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                                                replacement_string=""),
                                    keyboard_type=ft.KeyboardType.NUMBER)
 
+# button that opens calendar to pick a date
+_date_button = ft.ElevatedButton("Vyber datum",
+                                 icon=ft.icons.CALENDAR_MONTH_ROUNDED,
+                                 on_click=lambda _: _date_picker.pick_date())
+
+_date_picker = ft.DatePicker(on_change=_update_picked_date,
+                             first_date=datetime(2023, 10, 1),
+                             last_date=datetime(2030, 12, 31))
+
 
 ###########
 #  Route  #
@@ -129,6 +147,8 @@ def create_new_entry_view(page):
     """Return the view for the '/new route'
     :param page:ft.Page
     """
+    if _date_picker not in page.overlay:
+        page.overlay.append(_date_picker)
     _fill_recent_walks_table(page)
     view_new = ft.View(
         route="/new",
@@ -142,32 +162,37 @@ def create_new_entry_view(page):
                     width=page.window_width,
                     height=page.window_height,
                     fit=ft.ImageFit.FILL),
+                ft.Container(content=_new_record_txt,
+                             top=-10,
+                             left=65,
+                             height=200,
+                             width=270),
+                ft.Container(content=_date_button,
+                             top=160,
+                             right=130),
                 ft.Container(content=_walked_kms_entry,
-                             top=30,
+                             top=210,
                              left=25,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_time_entry,
-                             top=30,
+                             top=210,
                              left=200,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_kcal_entry,
-                             top=110,
+                             top=290,
                              left=25,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_steps_entry,
-                             top=110,
+                             top=290,
                              left=200,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=ft.ElevatedButton(text="Uložit",
                                                        on_click=lambda _: _validate_and_save_entry(page)),
-                             top=200,
-                             left=20),
-                ft.Container(content=_show_statistics_button,
-                             left=20,
-                             top=250),
+                             top=380,
+                             right=160),
                 ft.Container(content=_data_table,
-                             left=70,
-                             top=350),
+                             left=85,
+                             top=450),
             ],
                 width=page.window_width,
                 height=page.window_height - 70)]

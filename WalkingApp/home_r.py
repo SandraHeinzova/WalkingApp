@@ -4,15 +4,6 @@ import model
 import routing
 
 
-##################
-# Event Handlers #
-##################
-def _update_picked_date(e):
-    model.selected_date = _date_picker.value.strftime("%d/%m/%y")
-    _picked_date.value = "Budeš přidávat aktivitu ze dne {}".format(model.selected_date)
-    e.page.update()
-
-
 ###########
 #  View   #
 ###########
@@ -26,16 +17,6 @@ _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
 _picked_date = ft.Text(value="Vyber datum",
                        text_align=ft.TextAlign.CENTER,
                        color=ft.colors.WHITE54)
-
-# button that opens calendar to pick a date
-_date_button = ft.ElevatedButton("Vyber datum",
-                                 icon=ft.icons.CALENDAR_MONTH_ROUNDED,
-                                 on_click=lambda _: _date_picker.pick_date())
-
-# date picker control - calendar to choose date
-_date_picker = ft.DatePicker(on_change=_update_picked_date,
-                             first_date=datetime(2023, 10, 1),
-                             last_date=datetime(2030, 12, 31))
 
 # control that opens maps in the browser
 _open_maps = ft.Chip(
@@ -51,8 +32,6 @@ _open_maps = ft.Chip(
 def create_home_view(page):
     """Return the view for the '/' route
     :param page: container for controls in View"""
-    if _date_picker not in page.overlay:
-        page.overlay.append(_date_picker)
     view_home = ft.View(
         "/",
         bgcolor=ft.colors.BLUE_100,
@@ -66,7 +45,8 @@ def create_home_view(page):
                     height=page.window_height,
                     fit=ft.ImageFit.FILL
                 ),
-                ft.Container(left=65,
+                ft.Container(top=-10,
+                             left=65,
                              height=200,
                              width=270,
                              content=_welcome_txt),
