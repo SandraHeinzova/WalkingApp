@@ -45,7 +45,6 @@ def _validate_and_save_entry(page):
         return
 
     if not model.selected_date:
-        page.go("/")
         dialogs.show_no_date_picked_dialog(page)
         return
 
