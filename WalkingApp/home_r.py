@@ -17,10 +17,6 @@ _monthly_stat_txt = ft.Text(value="\nTenhle měsíc:\n",
                             theme_style=ft.TextThemeStyle.DISPLAY_SMALL,
                             text_align=ft.TextAlign.CENTER)
 
-# textfield that shows the date picked by the user
-_picked_date = ft.Text(value="Vyber datum",
-                       text_align=ft.TextAlign.CENTER,
-                       color=ft.colors.WHITE54)
 
 # control that opens maps in the browser
 _open_maps = ft.Chip(
