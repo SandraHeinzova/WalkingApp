@@ -56,7 +56,7 @@ Please feel free to contact me for any tips!
 <h2 align="center">Requirements</h2>
 <ul>
   <li>Python 3.12.1</li>
-  <li>Flet 0.17.0</li>
+  <li>Flet 0.20.0</li>
   <li>sqlite3 library</li>
   <li>re library</li>
   <li>datetime library</li>
