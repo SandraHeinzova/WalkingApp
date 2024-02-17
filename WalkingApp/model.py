@@ -59,5 +59,3 @@ def calculate_monthly_statistics():
                                      WHERE SUBSTR(day, 4, 2) = SUBSTR(CURRENT_DATE, 6, 2)
                                      AND SUBSTR(day, 7, 2) = SUBSTR(CURRENT_DATE, 3,2)""").fetchone())
 
-
-selected_date = None

@@ -7,14 +7,16 @@ import routing
 
 PATTERN_HOURS_MINUTES = re.compile(r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$')
 PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
+_selected_date = None
 
 
 ##################
 # Event Handlers #
 ##################
-def _update_picked_date(e):
-    model.selected_date = _date_picker.value.strftime("%d/%m/%y")
-    _date_button.text = "{}".format(model.selected_date)
+def _update_date_button(e):
+    global _selected_date
+    _selected_date = _date_picker.value.strftime("%d/%m/%y")
+    _date_button.text = "{}".format(_selected_date)
     e.page.update()
 
 
@@ -44,11 +46,11 @@ def _validate_and_save_entry(page):
         dialogs.show_required_fields_missing_dialog(page)
         return
 
-    if not model.selected_date:
+    if not _selected_date:
         dialogs.show_no_date_picked_dialog(page)
         return
 
-    date = model.selected_date
+    date = _selected_date
     kms = float(_walked_kms_entry.value)
     time = _validate_time_entry(page, _walked_time_entry.value)
     kcal = int(_walked_kcal_entry.value)
@@ -140,7 +142,7 @@ _date_button = ft.ElevatedButton(text="Vyber datum",
                                  on_click=lambda _: _date_picker.pick_date())
 
 # date picker control - calendar to choose date
-_date_picker = ft.DatePicker(on_change=_update_picked_date,
+_date_picker = ft.DatePicker(on_change=_update_date_button,
                              first_date=datetime(2023, 10, 1),
                              last_date=datetime(2030, 12, 31))
 
