@@ -8,7 +8,7 @@ def create_statistics_view(page):
     Return the view for the '/statistics' route.
     :param page: ft.Page
     """
-    total_km, total_time, total_kcal, total_steps = model.calculate_statistics()
+    total_km, total_time, total_kcal, total_steps = model.calculate_overall_statistics()
     view_statistics = ft.View(
         "/statistics",
         bgcolor=ft.colors.BLUE_100,

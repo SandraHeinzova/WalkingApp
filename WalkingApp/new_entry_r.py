@@ -70,6 +70,10 @@ def _validate_and_save_entry(page):
     page.update()
 
 
+def _reset_table_and_monthly_stats():
+    pass
+
+
 def _fill_recent_walks_table(page):
     walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
@@ -131,10 +135,11 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                    keyboard_type=ft.KeyboardType.NUMBER)
 
 # button that opens calendar to pick a date
-_date_button = ft.ElevatedButton("Vyber datum",
+_date_button = ft.ElevatedButton(text="Vyber datum",
                                  icon=ft.icons.CALENDAR_MONTH_ROUNDED,
                                  on_click=lambda _: _date_picker.pick_date())
 
+# date picker control - calendar to choose date
 _date_picker = ft.DatePicker(on_change=_update_picked_date,
                              first_date=datetime(2023, 10, 1),
                              last_date=datetime(2030, 12, 31))
@@ -189,7 +194,11 @@ def create_new_entry_view(page):
                 ft.Container(content=ft.ElevatedButton(text="Uložit",
                                                        on_click=lambda _: _validate_and_save_entry(page)),
                              top=380,
-                             right=160),
+                             right=220),
+                ft.Container(content=ft.ElevatedButton(text="Reset",
+                                                       on_click=lambda _: print(model.calculate_monthly_statistics())),
+                             top=380,
+                             right=100),
                 ft.Container(content=_data_table,
                              left=65,
                              top=450),
