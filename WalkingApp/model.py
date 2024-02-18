@@ -25,7 +25,8 @@ def get_recent_walks():
     Return the last 4 walks from the database as a list of tuples (date, kms)
     """
     with _open_database() as conn:
-        return [tuple(row) for row in conn.execute("SELECT day, kms FROM WALKS ORDER BY day DESC LIMIT 4")]
+        return [tuple(row) for row in conn.execute("""SELECT  strftime('%d/%m/%Y', day),
+                                                   kms FROM WALKS ORDER BY day DESC LIMIT 4""")]
 
 
 def save_to_database(day, kms: float, time, kcal: int, steps: int):
@@ -55,7 +56,6 @@ def calculate_monthly_statistics():
     Return the monthly sum of kms, duration, kcal and steps from the database as a tuple.
     """
     with _open_database() as conn:
-        return tuple(conn.execute("""SELECT day, CURRENT_DATE, SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS 
-                                     WHERE SUBSTR(day, 4, 2) = SUBSTR(CURRENT_DATE, 6, 2)
-                                     AND SUBSTR(day, 7, 2) = SUBSTR(CURRENT_DATE, 3,2)""").fetchone())
+        return tuple(conn.execute("""SELECT SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS 
+                                     WHERE strftime('%Y-%m', day) = strftime('%Y-%m', 'now')""").fetchone())
 
