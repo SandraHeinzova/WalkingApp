@@ -15,8 +15,8 @@ _selected_date = None
 ##################
 def _update_date_button(e):
     global _selected_date
-    _selected_date = _date_picker.value.strftime("%d/%m/%y")
-    _date_button.text = "{}".format(_selected_date)
+    _selected_date = _date_picker.value
+    _date_button.text = "{}".format(_selected_date.strftime("%d/%m/%y"))
     e.page.update()
 
 
