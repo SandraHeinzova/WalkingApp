@@ -1,5 +1,6 @@
 import flet as ft
 import routing
+import model
 
 ###########
 #  View   #
@@ -32,6 +33,7 @@ _open_maps = ft.Chip(
 def create_home_view(page):
     """Return the view for the '/' route
     :param page: container for controls in View"""
+    month_km, month_time, month_kcal, month_steps = model.calculate_monthly_statistics()
     view_home = ft.View(
         "/",
         bgcolor=ft.colors.BLUE_100,
@@ -57,7 +59,7 @@ def create_home_view(page):
                 ft.Container(content=_monthly_stat_txt,
                              top=350,
                              left=90),
-                ft.Container(content=ft.Text("Km"),
+                ft.Container(content=ft.Text(f"{round(month_km) if month_km else 0} Km"),
                              top=450,
                              left=25,
                              margin=10,
@@ -67,7 +69,8 @@ def create_home_view(page):
                              width=150,
                              height=80,
                              bgcolor=ft.colors.BLUE_GREY_50),
-                ft.Container(content=ft.Text("Hod"),
+                ft.Container(content=ft.Text(f"{month_time // 60}:{month_time % 60:02}:00 hod." if month_time
+                                             else "0 hod."),
                              top=450,
                              left=200,
                              margin=10,
@@ -77,7 +80,7 @@ def create_home_view(page):
                              width=150,
                              height=80,
                              bgcolor=ft.colors.BLUE_GREY_50),
-                ft.Container(content=ft.Text("Kcal"),
+                ft.Container(content=ft.Text(f"{month_kcal or 0} Kcal"),
                              top=550,
                              left=25,
                              margin=10,
@@ -87,7 +90,7 @@ def create_home_view(page):
                              width=150,
                              height=80,
                              bgcolor=ft.colors.BLUE_GREY_50),
-                ft.Container(content=ft.Text("Kroků"),
+                ft.Container(content=ft.Text(f"{month_steps or 0} kroků"),
                              top=550,
                              left=200,
                              margin=10,
