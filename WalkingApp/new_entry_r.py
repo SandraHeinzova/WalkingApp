@@ -72,10 +72,6 @@ def _validate_and_save_entry(page):
     page.update()
 
 
-def _reset_table_and_monthly_stats():
-    pass
-
-
 def _fill_recent_walks_table(page):
     walks_data = model.get_recent_walks()
     recent_walks = walks_data if walks_data else [("Žádné záznamy", "")]
@@ -196,11 +192,7 @@ def create_new_entry_view(page):
                 ft.Container(content=ft.ElevatedButton(text="Uložit",
                                                        on_click=lambda _: _validate_and_save_entry(page)),
                              top=380,
-                             right=220),
-                ft.Container(content=ft.ElevatedButton(text="Reset",
-                                                       on_click=lambda _: print(model.calculate_monthly_statistics())),
-                             top=380,
-                             right=100),
+                             right=160),
                 ft.Container(content=_data_table,
                              left=65,
                              top=450),
