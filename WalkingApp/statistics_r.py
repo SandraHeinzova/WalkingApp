@@ -1,4 +1,5 @@
 import flet as ft
+import dialogs
 import model
 import routing
 
@@ -63,7 +64,8 @@ def create_statistics_view(page):
                              left=100,
                              top=490),
                 ft.Container(content=ft.ElevatedButton(text="Reset",
-                                                       on_click=lambda _: print(model.calculate_monthly_statistics())),
+                                                       on_click=lambda _:
+                                                       dialogs.show_confirm_deleting_records_dialog(page)),
                              top=650,
                              right=160),
             ],

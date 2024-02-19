@@ -59,3 +59,11 @@ def calculate_monthly_statistics():
         return tuple(conn.execute("""SELECT SUM(kms), SUM(duration), SUM(kcal), SUM(steps) FROM WALKS 
                                      WHERE strftime('%Y-%m', day) = strftime('%Y-%m', 'now')""").fetchone())
 
+
+def reset_database():
+    """
+    Delete all records from database.
+    """
+    with _open_database() as conn:
+        conn.execute("DELETE FROM WALKS")
+        conn.commit()
