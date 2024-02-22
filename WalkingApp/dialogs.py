@@ -1,15 +1,9 @@
 import flet as ft
-import model
 
 
 def _close_dialog(page, dlg):
     dlg.open = False
     page.update()
-
-
-def _clear_table_and_statistics(page, dlg):
-    model.reset_database()
-    _close_dialog(page, dlg)
 
 
 def show_confirm_exit_dialog(page):
@@ -89,14 +83,17 @@ def show_no_date_picked_dialog(page):
     page.update()
 
 
-def show_confirm_deleting_records_dialog(page):
+def show_confirm_deleting_records_dialog(page, on_yes_action):
+    def on_yes_handler(_):
+        on_yes_action()
+        _close_dialog(page, confirm_deleting_records_dialog)
+
     confirm_deleting_records_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("Opravdu vše smazat?"),
         content=ft.Text("Tato akce nenávratně vymaže všechny záznamy.\nPřeješ si pokračovat?"),
         actions=[
-            ft.ElevatedButton("Ano", on_click=lambda _:
-                                          _clear_table_and_statistics(page, confirm_deleting_records_dialog)),
+            ft.ElevatedButton("Ano", on_click=on_yes_handler),
             ft.ElevatedButton("Ne", on_click=lambda _: _close_dialog(page, confirm_deleting_records_dialog)),
         ],
         open=True,

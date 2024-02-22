@@ -64,8 +64,8 @@ def create_statistics_view(page):
                              left=100,
                              top=490),
                 ft.Container(content=ft.ElevatedButton(text="Reset",
-                                                       on_click=lambda _:
-                                                       dialogs.show_confirm_deleting_records_dialog(page)),
+                                                       on_click=lambda _: dialogs.show_confirm_deleting_records_dialog
+                                                       (page, model.reset_database)),
                              top=650,
                              right=160),
             ],
