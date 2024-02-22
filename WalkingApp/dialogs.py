@@ -84,9 +84,10 @@ def show_no_date_picked_dialog(page):
 
 
 def show_confirm_deleting_records_dialog(page, on_yes_action):
-    def on_yes_handler(_):
+    def on_yes_handler(e):
         on_yes_action()
         _close_dialog(page, confirm_deleting_records_dialog)
+        e.page.go("/")
 
     confirm_deleting_records_dialog = ft.AlertDialog(
         modal=True,
