@@ -14,7 +14,7 @@ _welcome_txt = ft.Text(value="\nVítej ve WalkingApp!\n",
 
 # textfield that shows monthly statistics text
 _monthly_stat_txt = ft.Text(value="\nTenhle měsíc:\n",
-                            color=ft.colors.CYAN_100,
+                            color=ft.colors.BLUE_GREY_50,
                             theme_style=ft.TextThemeStyle.DISPLAY_SMALL,
                             text_align=ft.TextAlign.CENTER)
 
