@@ -1,4 +1,5 @@
 import flet as ft
+import routing
 
 
 def _close_dialog(page, dlg):
@@ -87,6 +88,7 @@ def show_confirm_deleting_records_dialog(page, on_yes_action):
     def on_yes_handler(e):
         on_yes_action()
         _close_dialog(page, confirm_deleting_records_dialog)
+        routing.nav_bar.selected_index = 0
         e.page.go("/")
 
     confirm_deleting_records_dialog = ft.AlertDialog(
