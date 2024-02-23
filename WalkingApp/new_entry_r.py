@@ -93,7 +93,7 @@ _new_record_txt = ft.Text(value="\nPřidej záznam!\n",
                           text_align=ft.TextAlign.CENTER)
 # data table that holds data from last four walks
 _data_table = ft.DataTable(
-    bgcolor=ft.colors.WHITE54,
+    bgcolor=ft.colors.BLUE_50,
     columns=[
         ft.DataColumn(ft.Text("Datum")),
         ft.DataColumn(ft.Text("Kilometry")),
