@@ -34,13 +34,7 @@ def main(page: ft.Page):
         page.views[:] = views_list
         page.update()
 
-    def handle_view_pop(_):
-        page.views.pop()
-        top_view = page.views[-1]
-        page.go(top_view.route)
-
     page.on_route_change = handle_route_change
-    page.on_view_pop = handle_view_pop
     page.go(page.route)
 
 
