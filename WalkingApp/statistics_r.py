@@ -1,6 +1,7 @@
 import flet as ft
-import model
 import dialogs
+import model
+import routing
 
 
 def create_statistics_view(page):
@@ -8,18 +9,11 @@ def create_statistics_view(page):
     Return the view for the '/statistics' route.
     :param page: ft.Page
     """
-    # button that exits application
-    exit_button = ft.ElevatedButton(text="Konec",
-                                    style=ft.ButtonStyle(
-                                        shape=ft.ContinuousRectangleBorder(radius=30)),
-                                    on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
-
-    total_km, total_time, total_kcal, total_steps = model.calculate_statistics()
+    total_km, total_time, total_kcal, total_steps = model.calculate_overall_statistics()
     view_statistics = ft.View(
         "/statistics",
         bgcolor=ft.colors.BLUE_100,
-        appbar=ft.AppBar(title=ft.Text("Statistiky"),
-                         bgcolor=ft.colors.BLUE_100),
+        navigation_bar=routing.nav_bar,
         padding=0,
         controls=[
             ft.Stack(controls=[
@@ -28,7 +22,8 @@ def create_statistics_view(page):
                     width=page.window_width,
                     height=page.window_height,
                     fit=ft.ImageFit.FILL),
-                ft.Container(content=ft.Text(f"{round(total_km) if total_km else 0} Km"),
+                ft.Container(content=ft.Text(f"{round(total_km) if total_km else 0} Km",
+                                             weight=ft.FontWeight.W_600),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -37,9 +32,10 @@ def create_statistics_view(page):
                              width=175,
                              height=100,
                              left=100,
-                             top=20),
+                             top=100),
                 ft.Container(content=ft.Text(f"{total_time // 60}:{total_time % 60:02}:00 hod." if total_time
-                                             else "0 hod."),
+                                             else "0 hod.",
+                                             weight=ft.FontWeight.W_600),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -48,8 +44,9 @@ def create_statistics_view(page):
                              width=175,
                              height=100,
                              left=100,
-                             top=150),
-                ft.Container(content=ft.Text(f"{total_kcal or 0} Kcal"),
+                             top=230),
+                ft.Container(content=ft.Text(f"{total_kcal or 0} Kcal",
+                                             weight=ft.FontWeight.W_600),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -58,8 +55,9 @@ def create_statistics_view(page):
                              width=175,
                              height=100,
                              left=100,
-                             top=280),
-                ft.Container(content=ft.Text(f"{total_steps or 0} kroků"),
+                             top=360),
+                ft.Container(content=ft.Text(f"{total_steps or 0} kroků",
+                                             weight=ft.FontWeight.W_600),
                              margin=10,
                              padding=10,
                              alignment=ft.alignment.center,
@@ -68,12 +66,12 @@ def create_statistics_view(page):
                              width=175,
                              height=100,
                              left=100,
-                             top=410),
-                ft.Container(content=exit_button,
-                             right=5,
-                             bottom=80,
-                             width=100,
-                             height=25),
+                             top=490),
+                ft.Container(content=ft.ElevatedButton(text="Reset",
+                                                       on_click=lambda _: dialogs.show_confirm_deleting_records_dialog
+                                                       (page, model.reset_database)),
+                             top=650,
+                             right=160),
             ],
                 width=page.window_width,
                 height=page.window_height - 70)]

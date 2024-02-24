@@ -1,4 +1,5 @@
 import flet as ft
+import routing
 
 
 def _close_dialog(page, dlg):
@@ -80,4 +81,26 @@ def show_no_date_picked_dialog(page):
     )
 
     page.dialog = no_date_picked_dialog
+    page.update()
+
+
+def show_confirm_deleting_records_dialog(page, on_yes_action):
+    def on_yes_handler(e):
+        on_yes_action()
+        _close_dialog(page, confirm_deleting_records_dialog)
+        routing.nav_bar.selected_index = 0
+        e.page.go("/")
+
+    confirm_deleting_records_dialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Opravdu vše smazat?"),
+        content=ft.Text("Tato akce nenávratně vymaže všechny záznamy.\nPřeješ si pokračovat?"),
+        actions=[
+            ft.ElevatedButton("Ano", on_click=on_yes_handler),
+            ft.ElevatedButton("Ne", on_click=lambda _: _close_dialog(page, confirm_deleting_records_dialog)),
+        ],
+        open=True,
+    )
+
+    page.dialog = confirm_deleting_records_dialog
     page.update()

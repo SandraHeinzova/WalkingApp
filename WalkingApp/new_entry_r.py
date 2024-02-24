@@ -1,15 +1,25 @@
 import flet as ft
 import re
+from datetime import datetime
 import dialogs
 import model
+import routing
 
 PATTERN_HOURS_MINUTES = re.compile(r'^([0-9]|1[0-2]|2[0-3]):[0-5][0-9]$')
 PATTERN_HOURS = re.compile(r'^(1?[0-9]|2[0-3])$')
+_selected_date = None
 
 
 ##################
 # Event Handlers #
 ##################
+def _update_date_button(e):
+    global _selected_date
+    _selected_date = _date_picker.value
+    _date_button.text = "{}".format(_selected_date.strftime("%d/%m/%y"))
+    e.page.update()
+
+
 def _validate_time_entry(page, walked_time_entry_value):
     """Validate entered time and convert it to minutes
     :param page: ft.Page
@@ -36,12 +46,11 @@ def _validate_and_save_entry(page):
         dialogs.show_required_fields_missing_dialog(page)
         return
 
-    if not model.selected_date:
-        page.go("/")
+    if not _selected_date:
         dialogs.show_no_date_picked_dialog(page)
         return
 
-    date = model.selected_date
+    date = _selected_date
     kms = float(_walked_kms_entry.value)
     time = _validate_time_entry(page, _walked_time_entry.value)
     kcal = int(_walked_kcal_entry.value)
@@ -58,6 +67,7 @@ def _validate_and_save_entry(page):
     _walked_time_entry.value = ""
     _walked_kcal_entry.value = ""
     _walked_steps_entry.value = ""
+    _date_button.text = "Vyber datum"
     _fill_recent_walks_table(page)
     page.update()
 
@@ -75,19 +85,15 @@ def _fill_recent_walks_table(page):
 ###########
 #  View   #
 ###########
-# button that exits application
-_exit_button = ft.ElevatedButton(text="Konec",
-                                 style=ft.ButtonStyle(
-                                     shape=ft.ContinuousRectangleBorder(radius=30)),
-                                 on_click=lambda e: dialogs.show_confirm_exit_dialog(e.page))
-
-# button for open the statistics page, on_click parameter with corresponding function
-_show_statistics_button = ft.ElevatedButton(text="Ukaž statistiky",
-                                            on_click=lambda e: e.page.go("/statistics"))
-
+# textfield that shows new record text
+_new_record_txt = ft.Text(value="\nPřidej záznam!\n",
+                          color=ft.colors.CYAN_900,
+                          size=40,
+                          theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
+                          text_align=ft.TextAlign.CENTER)
 # data table that holds data from last four walks
 _data_table = ft.DataTable(
-    bgcolor=ft.colors.WHITE54,
+    bgcolor=ft.colors.BLUE_50,
     columns=[
         ft.DataColumn(ft.Text("Datum")),
         ft.DataColumn(ft.Text("Kilometry")),
@@ -126,6 +132,16 @@ _walked_steps_entry = ft.TextField(label="A kolik kroků?",
                                                                replacement_string=""),
                                    keyboard_type=ft.KeyboardType.NUMBER)
 
+# button that opens calendar to pick a date
+_date_button = ft.ElevatedButton(text="Vyber datum",
+                                 icon=ft.icons.CALENDAR_MONTH_ROUNDED,
+                                 on_click=lambda _: _date_picker.pick_date())
+
+# date picker control - calendar to choose date
+_date_picker = ft.DatePicker(on_change=_update_date_button,
+                             first_date=datetime(2023, 10, 1),
+                             last_date=datetime(2030, 12, 31))
+
 
 ###########
 #  Route  #
@@ -134,13 +150,14 @@ def create_new_entry_view(page):
     """Return the view for the '/new route'
     :param page:ft.Page
     """
+    if _date_picker not in page.overlay:
+        page.overlay.append(_date_picker)
     _fill_recent_walks_table(page)
     view_new = ft.View(
         route="/new",
         bgcolor=ft.colors.BLUE_100,
         padding=0,
-        appbar=ft.AppBar(title=ft.Text("Nový záznam"),
-                         bgcolor=ft.colors.BLUE_100),
+        navigation_bar=routing.nav_bar,
         controls=[
             ft.Stack(controls=[
                 ft.Image(
@@ -148,37 +165,37 @@ def create_new_entry_view(page):
                     width=page.window_width,
                     height=page.window_height,
                     fit=ft.ImageFit.FILL),
+                ft.Container(content=_new_record_txt,
+                             top=-10,
+                             left=65,
+                             height=200,
+                             width=270),
+                ft.Container(content=_date_button,
+                             top=160,
+                             right=120),
                 ft.Container(content=_walked_kms_entry,
-                             top=30,
-                             left=25,
+                             top=210,
+                             left=35,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_time_entry,
-                             top=30,
-                             left=200,
+                             top=210,
+                             left=215,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_kcal_entry,
-                             top=110,
-                             left=25,
+                             top=290,
+                             left=35,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=_walked_steps_entry,
-                             top=110,
-                             left=200,
+                             top=290,
+                             left=215,
                              bgcolor=ft.colors.BLUE_50),
                 ft.Container(content=ft.ElevatedButton(text="Uložit",
                                                        on_click=lambda _: _validate_and_save_entry(page)),
-                             top=200,
-                             left=20),
-                ft.Container(content=_show_statistics_button,
-                             left=20,
-                             top=250),
+                             top=380,
+                             right=150),
                 ft.Container(content=_data_table,
-                             left=70,
-                             top=350),
-                ft.Container(content=_exit_button,
-                             right=5,
-                             bottom=80,
-                             width=100,
-                             height=25)
+                             left=65,
+                             top=450),
             ],
                 width=page.window_width,
                 height=page.window_height - 70)]
