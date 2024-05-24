@@ -7,6 +7,8 @@ I used Python 🐍 and UI Flet to make this works! For full requirements look be
 Please feel free to contact me for any tips or recomendations! 
 </p>
 
+<p align="center">Free Youtube Demo how the app looks like and work here - <a href="https://www.youtube.com/watch?v=D8G5DumpMMg">WalkingApp Demo</a></p>
+
 <h2 align="center">How to run the App </h2>
 
 <ul>
